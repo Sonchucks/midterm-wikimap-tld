@@ -14,6 +14,8 @@ const knex        = require("knex")(knexConfig[ENV]);
 const morgan      = require('morgan');
 const knexLogger  = require('knex-logger');
 
+const cookieSession = require('cookie-session')
+
 // Seperated Routes for each Resource
 const usersRoutes = require("./routes/users");
 
@@ -45,6 +47,12 @@ app.get("/", (req, res) => {
 
 app.get('/maps', (req, res) => {
   res.render('map-list');
+});
+
+app.get("/login/:id" , (req, res) => {
+  req.session.userID = req.params.id;
+  res.status(201).send();
+  res.redirect('/maps');
 });
 
 
