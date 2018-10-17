@@ -1,0 +1,43 @@
+#nav-bar {
+  display:grid;
+  grid-template-columns: 25% 50% 25%
+
+}
+
+  <body>
+    <header>
+      <nav id="nav-bar">
+        <span class="header">Wiki Map</span>
+        <div class="nav-buttons">
+          <div class="logged-out">
+            <button class="login" type="button"></button>
+            <button class="register" type="button"></button>
+          </div>
+          <div class="logged-in">
+            <button class="logout" type="button"></button>
+            <button class="new-map" type="button"></button>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <section class="list">
+        <span class="title">Best places to eat downtown!</span>
+        <span class="description">
+          Here's a map of my favorite joints to grab a bite downtown.
+        </span>
+      </section>
+
+      <section class="list">
+        <span class="title"></span>
+        <span class="description"></span>
+      </section>
+
+      <section class="list">
+        <span class="title"></span>
+        <span class="description"></span>
+      </section>
+
+    </main>
+  </body>
