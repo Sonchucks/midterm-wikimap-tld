@@ -37,10 +37,11 @@
       }).addTo(myMap);
 
       function onMapClick(e) {
-        popup
-        .setLatLng(e.latlng)
-        .setContent("You clicked the map at " + e.latlng.toString())
-        .openOn(myMap);
+        var coords = e.latlng;
+        var newMarker = L.marker(coords, {riseOnHover: true}).addTo(myMap);
+        newMarker
+          .bindPopup("<p><b>Check out this new marker!</b><br>It's coords are: " + coords + "!</p>")
+          .openPopup();
       }
       myMap.on('click', onMapClick);
     </script>
