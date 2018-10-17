@@ -1,7 +1,11 @@
 body {
   background-color: #EEE;
 
-  h1 {
-    color: #244751;
+  #nav-bar {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowarp;
+    justify-content: center;
   }
+
 }
