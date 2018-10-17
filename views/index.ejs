@@ -24,9 +24,6 @@
     <div id="mapid"></div>
     <script>
       var myMap = L.map('mapid').setView([51.505, -0.09], 13);
-      var marker = L.marker([51.5, -0.09]).addTo(myMap);
-      marker.bindPopup("<b>Hello world!</b><br>I am a popup.");
-      var popup = L.popup();
 
       L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}',
       {
@@ -38,7 +35,7 @@
 
       function onMapClick(e) {
         var coords = e.latlng;
-        var newMarker = L.marker(coords, {riseOnHover: true}).addTo(myMap);
+        var newMarker = L.marker(coords, {riseOnHover: true, draggable: true}).addTo(myMap);
         newMarker
           .bindPopup("<p><b>Check out this new marker!</b><br>It's coords are: " + coords + "!</p>")
           .openPopup();
