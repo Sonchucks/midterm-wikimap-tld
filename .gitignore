@@ -4,5 +4,5 @@ public/styles
 *.log
 *.sqlite3
 test/
-DS_Store
+.DS_Store
 *.scss
