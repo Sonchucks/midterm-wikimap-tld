@@ -1,13 +1,31 @@
 body {
   background-color: #EEE;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 
   h1 {
-    font-size: 2em;
+    align-self: center;
+    font-size: 1.5em;
+    font-family: 'Sigmar One', cursive;
+    text-align: center;
   }
+  #nav-buttons {
+    align-self: center;
+    display: flex;
+    flex-direction: column;
 
-  #mapid {
-    margin: auto;
-    height: 400px;
-    width: 70%;
+      .login {
+        margin-bottom: 1em;
+      }
+
+      .view-maps {
+
+
+      }
   }
 }
