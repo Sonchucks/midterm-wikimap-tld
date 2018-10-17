@@ -30,6 +30,7 @@
       <div class="">
         <button type="button">NEW MAP</button>
         <button class="rezoom" type="button">Check array!</button>
+        <button class="showmap" type="button">Show the map object!</button>
       </div>
     </nav>
 
@@ -42,8 +43,14 @@
         myMap.eachLayer(function(layer){
           if (layer.options.title === 'marker') {
           console.log(layer.getLatLng());
+          console.log(layer._popup._content);
           }
         });
+      });
+      $(".showmap").on('click', function () {
+        console.log("Center: " + myMap.getCenter());
+        console.log("Zoom: " + myMap.getZoom());
+        console.log("Bounds: " + myMap.getBounds());
       });
 
       L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}',
