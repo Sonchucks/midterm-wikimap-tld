@@ -3,6 +3,13 @@
 const express = require('express');
 const router  = express.Router();
 const PORT = 8000;
+const bodyParser = require('body-parser')
+const cookieSession = require('cookie-session')
+
+app.use(cookieSession({
+  name: 'session',
+  keys: ['userID']
+}))
 
 module.exports = (knex) => {
 
@@ -18,10 +25,7 @@ module.exports = (knex) => {
   return router;
 }
 
-
-
 app.get("/maps", (req, res) => {
-//see list of available maps created by users.
 
 
 });
@@ -50,23 +54,36 @@ app.get("/maps/new", (req, res) => {
 
 
 app.get("/login/:id" , (req, res) => {
-//   -Req.session.user id =req.parama.id
-// -redirect(/maps
+  req.session.userID = req.params.id;
 
+res.redirect('/maps')
 });
 
 app.post('/maps', (req, res) => {
   
   //add a new map, redirect to /maps
 
+  res.redirect('/maps');
 });
 
 
-app.put('/map/id', (req, res) => {
+app.put('/map/:id', (req, res) => {
   // Updates map redirect to /maps:id
-})
+  res.redirect("/maps/:id")
+});
 
 
+
+
+// function that checks the user is logged in 
+function isAuthenticated(req, res, next) {
+  if (req.params.id) {
+    retrun next();
+  } else {
+    res.redirect("/login");
+  }
+
+}
 
 
 
