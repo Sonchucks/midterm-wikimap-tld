@@ -1,5 +1,8 @@
 exports.seed = function(knex, Promise) {
-  return knex('users').del()
+  return knex('maps').del()
+    .then(function () {
+      return knex('users').del();
+    })
     .then(function () {
       return knex.raw('ALTER SEQUENCE users_id_seq RESTART WITH 1');
     })
