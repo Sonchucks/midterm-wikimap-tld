@@ -18,6 +18,7 @@ const cookieSession = require('cookie-session')
 
 // Seperated Routes for each Resource
 const usersRoutes = require("./routes/users");
+const mapRoutes = require('./routes/maps');
 
 // Load the logger first so all (static) HTTP requests are logged to STDOUT
 // 'dev' = Concise output colored by response status for development use.
@@ -40,21 +41,28 @@ app.use(express.static("public"));
 // Mount all resource routes
 app.use("/api/users", usersRoutes(knex));
 
+// Map routes 
+app.use("/maps", mapRoutes(knex));
+
 // Home page
 app.get("/", (req, res) => {
   res.render("index");
 });
 
-app.get('/maps', (req, res) => {
-  res.render('map-list');
+// login page
+app.get("/login" , (req, res) => {
+res.render('map-list')
 });
 
-app.get("/login/:id" , (req, res) => {
-  req.session.userID = req.params.id;
-  res.status(201).send();
-  res.redirect('/maps');
-});
-
+app.get('/user/:id', (req, res) => {
+  //display user profile
+  
+  })
+  
+  app.get("/login/:id" , (req, res) => {
+    req.session.userID = req.params.id;
+    res.redirect('/maps')
+  });
 
 app.listen(PORT, () => {
   console.log("Example app listening on port " + PORT);
