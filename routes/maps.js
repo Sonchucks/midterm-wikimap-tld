@@ -4,7 +4,7 @@ const PORT = 8000;
 const bodyParser = require('body-parser')
 const cookieSession = require('cookie-session')
 
-// / = maps 
+// / = maps
 
 module.exports = (knex) => {
 
@@ -13,9 +13,15 @@ app.get("/", isAuthenticated, (req, res) => {
 });
 
 
+app.get('/view', isAuthenticated, (req, res) => {
+    res.render('map-view');
+});
+
+
+
 app.get("/:id",isAuthenticated, (req, res) => {
-  
-  
+
+
   //-See one map in detail with option to edit
   //Click markers to get more information about locations
 
@@ -35,8 +41,8 @@ app.get("/new", isAuthenticated, (req, res) => {
 
 
 app.post('/', isAuthenticated, (req, res) => {
-  
-  //add a new map, redirect to 
+
+  //add a new map, redirect to
 
 });
 
@@ -46,16 +52,18 @@ app.put('/:id', isAuthenticated, (req, res) => {
   res.redirect("/:id")
 });
 
-// function that checks the user is logged in 
+
+
+// function that checks the user is logged in
 function isAuthenticated(req, res, next) {
     if (req.params.id) {
       return next();
     } else {
       return next();
     }
-  
+
   }
-  
+
 
 return app;
 }
