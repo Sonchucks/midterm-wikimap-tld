@@ -6,7 +6,7 @@ const PORT = 8000;
 const bodyParser = require('body-parser')
 const cookieSession = require('cookie-session')
 
-app.use(cookieSession({
+router.use(cookieSession({
   name: 'session',
   keys: ['userID']
 }))
@@ -25,41 +25,45 @@ module.exports = (knex) => {
   return router;
 }
 
-app.get("/maps", (req, res) => {
+router.get("/maps", isAuthenticated, (req, res) => {
 
 
 });
 
 
-app.get("/maps/:id" , (req, res) => {
+router.get("/maps/:id",isAuthenticated, (req, res) => {
+  
+  
   //-See one map in detail with option to edit
   //Click markers to get more information about locations
 
+
+
 });
 
-app.get("/maps/edit/:id", (req, res) => {
+router.get("/maps/edit/:id", isAuthenticated, (req, res) => {
   //Display map edit form
 
 });
 
-app.get('/user/:id', (req, res) => {
+router.get('/user/:id', isAuthenticated, (req, res) => {
 //display user profile
 
 })
 
-app.get("/maps/new", (req, res) => {
+router.get("/maps/new", isAuthenticated, (req, res) => {
 //Display map edit form
 
 });
 
 
-app.get("/login/:id" , (req, res) => {
+router.get("/login/:id" , (req, res) => {
   req.session.userID = req.params.id;
 
 res.redirect('/maps')
 });
 
-app.post('/maps', (req, res) => {
+router.post('/maps', isAuthenticated, (req, res) => {
   
   //add a new map, redirect to /maps
 
@@ -67,7 +71,7 @@ app.post('/maps', (req, res) => {
 });
 
 
-app.put('/map/:id', (req, res) => {
+router.put('/map/:id', isAuthenticated, (req, res) => {
   // Updates map redirect to /maps:id
   res.redirect("/maps/:id")
 });
@@ -78,7 +82,7 @@ app.put('/map/:id', (req, res) => {
 // function that checks the user is logged in 
 function isAuthenticated(req, res, next) {
   if (req.params.id) {
-    retrun next();
+    return next();
   } else {
     res.redirect("/login");
   }
