@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Home Page</title>
+
+    <link rel="stylesheet" href="/vendor/normalize-4.1.1.css" type="text/css" />
+    <link rel="stylesheet" href="/vendor/border-box.css" type="text/css" />
+    <link rel="stylesheet" href="/styles/map-view-layout.css" type="text/css" />
+
+    <!-- Imports Leaflet Stylesheet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css"
+   integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+   crossorigin=""/>
+
+   <!-- Imports Leaflet JS -->
+   <!-- THIS MUST BE PLACED BEFORE APP.JS AND AFTER THE LEAFLET STYLESHEET -->
+    <script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js"
+   integrity="sha512-nMMmRyTVoLYqjP9hrbed9S+FzjZHW5gY1TWCHA5ckwXZBadntCNs8kEqAWdrb9O7rxbCaA4lKTIWjDXZxflOcA=="
+   crossorigin=""></script>
+
+    <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script>
+  </head>
+
+  <body>
+    <nav id="nav-bar">
+      <span class="header"></span>
+      <div class="main">
+        <button type="button">Main Page</button>
+      </div>
+      <div class="">
+        <button type="button">NEW MAP</button>
+      </div>
+    </nav>
+
+    <div id="mapid">
+    <script>
+      var myMap = L.map('mapid').setView([51.505, -0.09], 13);
+
+      L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}',
+      {
+        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        maxZoom: 18,
+        id: 'mapbox.streets',
+        accessToken: 'pk.eyJ1IjoibG91aXNyaWVobCIsImEiOiJjam5kZjFzMTgyNjRqM3FvZXl4Y3ZyMXNuIn0.yLWkT311ioY116MNtVmy0A'
+      }).addTo(myMap);
+
+      function onMapClick(e) {
+        var coords = e.latlng;
+        var newMarker = L.marker(coords, {riseOnHover: true, draggable: true}).addTo(myMap);
+        newMarker
+          .bindPopup("<p><b>Check out this new marker!</b><br>It's coords are: " + coords + "!</p>")
+          .openPopup();
+        newMarker.on('dragend', function(event){
+            var updateMarker = event.target;
+            var updateCoords = updateMarker.getLatLng();
+            updateMarker.setLatLng(updateCoords,{riseOnHover:true, draggable:true}).bindPopup("<p><b>Check out this new marker!</b><br>It's coords are: " + updateCoords + "!</p>").update().openPopup();
+          });
+      }
+      myMap.on('click', onMapClick);
+    </script>
+  </div>
+  </body>
+</html>

@@ -47,6 +47,9 @@ app.get('/maps', (req, res) => {
   res.render('map-list');
 });
 
+app.get('/maps/view', (req, res) => {
+  res.render('map-view');
+});
 
 app.listen(PORT, () => {
   console.log("Example app listening on port " + PORT);
