@@ -26,6 +26,7 @@
       var myMap = L.map('mapid').setView([51.505, -0.09], 13);
       var marker = L.marker([51.5, -0.09]).addTo(myMap);
       marker.bindPopup("<b>Hello world!</b><br>I am a popup.");
+      var popup = L.popup();
 
       L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}',
       {
@@ -35,7 +36,13 @@
         accessToken: 'pk.eyJ1IjoibG91aXNyaWVobCIsImEiOiJjam5kZjFzMTgyNjRqM3FvZXl4Y3ZyMXNuIn0.yLWkT311ioY116MNtVmy0A'
       }).addTo(myMap);
 
-
+      function onMapClick(e) {
+        popup
+        .setLatLng(e.latlng)
+        .setContent("You clicked the map at " + e.latlng.toString())
+        .openOn(myMap);
+      }
+      myMap.on('click', onMapClick);
     </script>
   </body>
 </html>
