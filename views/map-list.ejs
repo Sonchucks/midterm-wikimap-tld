@@ -15,10 +15,14 @@
       <nav id="nav-bar">
         <span class="header">Wiki Map</span>
         <div class="logout">
-          <button type="button">LOGOUT</button>
+          <form action="/" method="GET">
+            <input type="submit" value="Logout"></input>
+          </form>
         </div>
         <div class="new-map">
-          <button type="button">NEW MAP</button>
+          <form action="/map/new" method="GET">
+            <input type="submit" value="New Map"></input>
+          </form>
         </div>
       </nav>
     </header>

@@ -16,9 +16,14 @@
   <body>
     <h1>WELCOME<br>TO<br>WIKI <i class="fas fa-map-marked-alt"></i> MAPS</h1>
     <div id="nav-buttons">
-      <button class="login" type="button">Login</button>
-      <button class="view-maps" type="button">View Maps</button>
+      <form class="login" action="/login" method="GET">
+        <input type="submit" value="Login"></input>
+      </form>
+      <form class="view-maps" action="/maps" method="GET">
+        <input type="submit" value="View Maps"></input>
+      </form>
     </div>
+
 
   </body>
 </html>
