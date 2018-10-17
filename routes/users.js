@@ -3,6 +3,13 @@
 const express = require('express');
 const router  = express.Router();
 const PORT = 8000;
+const bodyParser = require('body-parser')
+const cookieSession = require('cookie-session')
+
+router.use(cookieSession({
+  name: 'session',
+  keys: ['userID']
+}))
 
 module.exports = (knex) => {
 
@@ -15,12 +22,5 @@ module.exports = (knex) => {
     });
   });
 
-  router.get("/maps", isAuthenticated, (req, res) => {
-
-  });
-
-
-  router.get("/maps/:id",isAuthenticated, (req, res) => {
-
-
-
+  return router;
+}
