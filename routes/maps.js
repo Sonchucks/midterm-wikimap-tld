@@ -9,7 +9,14 @@ const cookieSession = require('cookie-session')
 module.exports = (knex) => {
 
 app.get("/", isAuthenticated, (req, res) => {
-    res.render("map-list");
+  knex
+  .select("*")
+  .from("maps")
+  .then((maps) => {
+    console.log(maps);
+    res.render('map-list', {maps});
+
+  });
 });
 
 
