@@ -7,11 +7,65 @@
     <link rel="stylesheet" href="/vendor/border-box.css" type="text/css" />
     <link rel="stylesheet" href="/styles/layout.css" type="text/css" />
 
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css"
+   integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+   crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js"
+   integrity="sha512-nMMmRyTVoLYqjP9hrbed9S+FzjZHW5gY1TWCHA5ckwXZBadntCNs8kEqAWdrb9O7rxbCaA4lKTIWjDXZxflOcA=="
+   crossorigin=""></script>
+
     <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script>
     <script type="text/javascript" src="/scripts/app.js"></script>
+
   </head>
 
   <body>
+
     <h1>Hello World!</h1>
+    <div id="mapid"></div>
+    <script>
+      var myMap = L.map('mapid').setView([51.505, -0.09], 13);
+      var marker = L.marker([51.5, -0.09]).addTo(myMap);
+      marker.bindPopup("<b>Hello world!</b><br>I am a popup.");
+
+      L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}',
+      {
+        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        maxZoom: 18,
+        id: 'mapbox.streets',
+        accessToken: 'pk.eyJ1IjoibG91aXNyaWVobCIsImEiOiJjam5kZjFzMTgyNjRqM3FvZXl4Y3ZyMXNuIn0.yLWkT311ioY116MNtVmy0A'
+      }).addTo(myMap);
+
+
+    </script>
+
+    <header>
+      <nav id="nav-bar">
+        <span class="header">Wiki Map</span>
+        <button class="logout" type="button">LOGOUT</button>
+        <button class="new-map" type="button">NEW MAP</button>
+      </nav>
+    </header>
+
+    <main>
+      <section class="list">
+        <span class="title">Best places to eat downtown Montreal!</span>
+        <span class="description">
+          Here's a map of my favorite joints to grab a bite downtown.
+        </span>
+      </section>
+
+      <section class="list">
+        <span class="title">Best places to eat downtown Toronto!</span>
+        <span class="description">Here's a map of my favorite joints to grab a bite downtown.</span>
+      </section>
+
+      <section class="list">
+        <span class="title">Coffee ipsum</span>
+        <span class="description">Milk cream, viennese mug, rich beans body ut macchiato shop. Dark, chicory so organic java skinny roast. Percolator strong, cup cortado aroma fair trade acerbic viennese variety percolator kopi-luwak. Sweet, cappuccino robust percolator shop plunger pot aftertaste beans trifecta skinny. Carajillo coffee lungo whipped est robusta aged.</span>
+      </section>
+
+    </main>
+
   </body>
 </html>
