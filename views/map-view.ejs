@@ -29,12 +29,22 @@
       </div>
       <div class="">
         <button type="button">NEW MAP</button>
+        <button class="rezoom" type="button">Check array!</button>
       </div>
     </nav>
 
     <div id="mapid">
     <script>
       var myMap = L.map('mapid').setView([51.505, -0.09], 13);
+      var markers = new L.FeatureGroup();
+
+      $(".rezoom").on('click', function () {
+        myMap.eachLayer(function(layer){
+          if (layer.options.title === 'marker') {
+          console.log(layer.getLatLng());
+          }
+        });
+      });
 
       L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}',
       {
@@ -46,7 +56,8 @@
 
       function onMapClick(e) {
         var coords = e.latlng;
-        var newMarker = L.marker(coords, {riseOnHover: true, draggable: true}).addTo(myMap);
+        var newMarker = L.marker(coords, {title: 'marker', riseOnHover: true, draggable: true}).addTo(myMap);
+        var bounds = new L.latLngBounds();
         newMarker
           .bindPopup("<p><b>Check out this new marker!</b><br>It's coords are: " + coords + "!</p>")
           .openPopup();
