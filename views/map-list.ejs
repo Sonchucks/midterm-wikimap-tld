@@ -25,12 +25,14 @@
 
     <main>
       <% for(var i = 0; i < maps.length; i++) { %>
+        <a href="/maps/<%= maps[i].id %>">
       <section class="list">
         <span class="title"><%= maps[i].name %></span>
         <span class="description">
-          <%= maps[i].description%>
+          <%= maps[i].description%></a>
         </span>
       </section>
+    </a>
       <% } %>
   
     </main>

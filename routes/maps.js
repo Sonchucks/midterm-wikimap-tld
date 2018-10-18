@@ -32,7 +32,7 @@ app.get("/:id",isAuthenticated, (req, res) => {
   //-See one map in detail with option to edit
   //Click markers to get more information about locations
 
-
+  res.json({id: req.params.id})
 
 });
 
