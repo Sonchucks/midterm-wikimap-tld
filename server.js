@@ -51,9 +51,8 @@ app.get("/", (req, res) => {
 
 // login page
 app.get("/login" , (req, res) => {
-res.render('map-list')
+  res.render('map-list');
 });
-
 
 app.get('/user/:id', (req, res) => {
   //display user profile
