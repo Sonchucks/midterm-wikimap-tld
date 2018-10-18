@@ -105,8 +105,8 @@
             var updateCoords = updateMarker.getLatLng();
             updateMarker.setLatLng(updateCoords,{riseOnHover:true, draggable:true}).bindPopup("<p><b>Check out this new marker!</b><br>It's coords are: " + updateCoords + "!</p>").update().openPopup();
           });
-
       }
+
       myMap.on('click', onMapClick);
     </script>
   </div>
