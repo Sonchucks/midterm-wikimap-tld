@@ -42,11 +42,19 @@
       $(".rezoom").on('click', function () {
         myMap.eachLayer(function(layer){
           if (layer.options.title === 'marker') {
+          markers.addLayer(layer);
           console.log(layer.getLatLng());
           console.log(layer._popup._content);
           }
         });
+        console.log(markers);
+        var newBounds = markers.getBounds();
+        myMap.fitBounds(newBounds, {padding: [10,10]});
+        myMap.setMaxBounds(newBounds);
+        var currentZoom = myMap.getZoom();
+        myMap.setMinZoom(currentZoom - 1);
       });
+
       $(".showmap").on('click', function () {
         console.log("Center: " + myMap.getCenter());
         console.log("Zoom: " + myMap.getZoom());
@@ -61,8 +69,8 @@
         accessToken: 'pk.eyJ1IjoibG91aXNyaWVobCIsImEiOiJjam5kZjFzMTgyNjRqM3FvZXl4Y3ZyMXNuIn0.yLWkT311ioY116MNtVmy0A'
       }).addTo(myMap);
 
-      function onMapClick(e) {
-        var coords = e.latlng;
+      function onMapClick(event) {
+        var coords = event.latlng;
         var newMarker = L.marker(coords, {title: 'marker', riseOnHover: true, draggable: true}).addTo(myMap);
         var bounds = new L.latLngBounds();
         newMarker
