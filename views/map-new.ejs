@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="/vendor/normalize-4.1.1.css" type="text/css" />
     <link rel="stylesheet" href="/vendor/border-box.css" type="text/css" />
     <link rel="stylesheet" href="/styles/map-new-layout.css" type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Sigmar+One" rel="stylesheet">
 
     <!-- Imports Leaflet Stylesheet -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css"
@@ -23,8 +24,11 @@
 
   <body>
 
+  <header>
     <h1>Create a new map!</h1>
+  </header>
 
+  <main>
     <form id="new-map" action="/maps" method="POST">
       <label for="title">Give your map a name!</label>
       <input id="title" type="text" name="title" placeholder="Enter your map name here!">
@@ -60,8 +64,9 @@
       </script>
     </div>
 
-    <input type="submit" value="Register">
+    <input type="submit" value="Make Map">
     </form>
+  </main>
 
   </body>
 </html>
