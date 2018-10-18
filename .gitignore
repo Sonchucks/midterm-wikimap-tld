@@ -5,3 +5,5 @@ public/styles
 *.sqlite3
 test/
 .DS_Store
+
+public/scripts/test.js

@@ -8,4 +8,13 @@ $( document ).ready(function() {
   $('.view-maps').click(function(){
     window.location = "/maps";
   });
+
+  $('.map-list').click(function() {
+    window.location = "/maps";
+  });
+
+  $('.edit').click(function() {
+    window.location = "/";
+  });
+
 });
