@@ -10,7 +10,6 @@
     <link rel="stylesheet" href="/styles/map-list-layout.css" type="text/css" />
 
     <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script>
-    <script type="text/javascript" src="/scripts/map-list.js"></script>
   </head>
 
   <body>
@@ -32,12 +31,12 @@
 
     <main>
       <% for(var i = 0; i < maps.length; i++) { %>
-        <form class='list' action="/maps/<%= maps[i].id %>" method="GET">
+        <a href="/maps/<%= maps[i].id %>">
           <span class="title"><%= maps[i].name %></span>
           <span class="description">
             <%= maps[i].description%></a>
           </span>
-        </form>
+        </a>
       <% } %>
     </main>
   </body>

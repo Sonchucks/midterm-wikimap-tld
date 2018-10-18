@@ -8,7 +8,7 @@ const cookieSession = require('cookie-session')
 
 module.exports = (knex) => {
 
-  
+
 app.get("/", isAuthenticated, (req, res) => {
   knex
   .select("*")
@@ -29,21 +29,48 @@ app.get('/new', isAuthenticated, (req, res) => {
   res.render("map-new");
 });
 
+app.get('/api', (req, res) => {
+  knex("markers")
+  .join('maps', 'markers.map_id', '=', 'maps.id')
+  .join('users', 'maps.creator_id', '=', 'users.id')
+  .select("*")
+  .then((markers) => {
+    res.json(markers);
+  });
+});
 
 app.get("/:id",isAuthenticated, (req, res) => {
-
-
   //-See one map in detail with option to edit
   //Click markers to get more information about locations
+  let mapDetails = {};
+  knex("markers")
+  .join('maps', 'markers.map_id', '=', 'maps.id')
+  .join('users', 'maps.creator_id', '=', 'users.id')
+  .select("*")
+  .where("maps.id", req.params.id)
+  .then((mapDetails) => {
+    if (mapDetails.length === 0) {
+      res.status(404);
+      res.send();
+    } else {
+      let mapArray = mapDetails.map( (element) => {
+        return {
+          coords: element.coords,
+          content: element.content
+        };
+      });
 
-  res.json({id: req.params.id})
+      console.log(mapArray);
+      res.render('map-view', {mapArray});
+    }
+  });
 
 });
 
 app.get("/edit/:id", isAuthenticated, (req, res) => {
-  //Display map edit form
 
 });
+
 
 
 app.post('/', isAuthenticated, (req, res) => {

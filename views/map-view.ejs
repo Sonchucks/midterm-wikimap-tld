@@ -19,68 +19,29 @@
    crossorigin=""></script>
 
     <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script>
+    <script type="text/javascript" src="/scripts/index.js"></script>
   </head>
 
   <body>
     <nav id="nav-bar">
-      <span class="header"></span>
-      <div class="main">
-        <button type="button">Main Page</button>
+      <h1>Welcome to Map View</h1>
+      <div class="map-list">
+        <button type="button">Back to List</button>
       </div>
-      <div class="">
-        <button type="button">NEW MAP</button>
-        <button class="rezoom" type="button">Check array!</button>
-        <button class="showmap" type="button">Show the map object!</button>
+      <div class="edit">
+        <button type="button">Edit</button>
       </div>
     </nav>
 
+    <div class="map">
+      <button class="rezoom" type="button">Check array!</button>
+      <button class="showmap" type="button">Show the map object!</button>
+    </div>
     <div id="mapid">
     <script>
 
-      var myMap = L.map('mapid').setView([45.500538, -73.644471], 13);
+      var map = L.map('mapid').setView([45.500538, -73.644471], 13);
       var markers = new L.FeatureGroup();
-
-      function printAllInObject (object) {
-        for( var thing in object) {
-          console.log(thing);
-        }
-      }
-
-      // Refocus the map based on the marker group bounds
-      // This will mock when a new page is rendered to restrict the zoom if desired
-      $(".rezoom").on('click', function () {
-        myMap.eachLayer(function(layer){
-          if (layer.options.title === 'marker') {
-          markers.addLayer(layer);
-          console.log("Leaflet id: " + layer._leaflet_id);
-          console.log("Latlng: " + layer.getLatLng());
-          console.log("Popup content: " + layer._popup._content);
-          }
-        });
-        var newBounds = markers.getBounds();
-        myMap.fitBounds(newBounds, {padding: [10,10]});
-        myMap.setMaxBounds(newBounds);
-        var currentZoom = myMap.getZoom();
-        myMap.setMinZoom(currentZoom - 1);
-      });
-
-      // Debug: print some details on the map object
-      $(".showmap").on('click', function () {
-        console.log("Center: " + myMap.getCenter());
-        console.log("Zoom: " + myMap.getZoom());
-        console.log("Bounds: " + myMap.getBounds());
-      });
-
-      //Remove a marker
-      $("body").on("click", ".delete", function() {
-        var markerToDeleteID = parseInt($(this).attr('id'), 10);
-        myMap.eachLayer(function (layer) {
-          if (layer.options.title === 'marker' && layer._leaflet_id === markerToDeleteID) {
-              myMap.removeLayer(layer);
-              markers.removeLayer(layer);
-          }
-        });
-      });
 
       L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}',
       {
@@ -88,27 +49,93 @@
         maxZoom: 18,
         id: 'mapbox.streets',
         accessToken: 'pk.eyJ1IjoibG91aXNyaWVobCIsImEiOiJjam5kZjFzMTgyNjRqM3FvZXl4Y3ZyMXNuIn0.yLWkT311ioY116MNtVmy0A'
-      }).addTo(myMap);
+      }).addTo(map);
 
-      // Create a marker on map click
-      function onMapClick(event) {
-        var coords = event.latlng;
-        var newMarker = L.marker(coords, {title: 'marker', riseOnHover: true, draggable: true}).addTo(myMap);
-        var bounds = new L.latLngBounds();
-        newMarker
-          .bindPopup("<p><b>Check out this new marker!</b><br>It's coords are: " + coords + "!</p>" +
-            '<p>My id: ' + newMarker._leaflet_id + '</p>' +
-            '<br><button type="button" class="delete" id="' + newMarker._leaflet_id + '">Delete</button>')
-          .openPopup();
-        newMarker.on('dragend', function(event){
-            var updateMarker = event.target;
-            var updateCoords = updateMarker.getLatLng();
-            updateMarker.setLatLng(updateCoords,{riseOnHover:true, draggable:true}).bindPopup("<p><b>Check out this new marker!</b><br>It's coords are: " + updateCoords + "!</p>").update().openPopup();
-          });
+      function printAllInObject (object) {
+        for( var thing in object) {
+          console.log(thing);
+        }
       }
 
-      myMap.on('click', onMapClick);
+      var mapInfo = <%- JSON.stringify(mapArray)%>;
+      console.log(mapInfo[0].coords);
+
+      for(var loop = 0; loop < mapInfo.length; loop++) {
+        console.log("Loop start!");
+        var coordinates = mapInfo[loop].coords;
+        var content = mapInfo[loop].content;
+        console.log(coordinates, content);
+        var marker = L.marker(coordinates, {title: 'marker', riseOnHover: true}).addTo(map);
+        marker
+          .bindPopup("<p>" + content + "</p>");
+        markers.addLayer(marker);
+        var newBounds = markers.getBounds();
+        map.fitBounds(newBounds, {padding: [10,10]});
+      }
+
+      // // Refocus the map based on the marker group bounds
+      // // This will mock when a new page is rendered to restrict the zoom if desired
+      // $(".rezoom").on('click', function () {
+      //   map.eachLayer(function(layer){
+      //     if (layer.options.title === 'marker') {
+      //     markers.addLayer(layer);
+      //     console.log("Leaflet id: " + layer._leaflet_id);
+      //     console.log("Latlng: " + layer.getLatLng());
+      //     console.log("Popup content: " + layer._popup._content);
+      //     }
+      //   });
+      //   var newBounds = markers.getBounds();
+      //   map.fitBounds(newBounds, {padding: [10,10]});
+      //   map.setMaxBounds(newBounds);
+      //   var currentZoom = map.getZoom();
+      //   map.setMinZoom(currentZoom - 1);
+      // });
+
+      // // Debug: print some details on the map object
+      // $(".showmap").on('click', function () {
+      //   console.log("Center: " + map.getCenter());
+      //   console.log("Zoom: " + map.getZoom());
+      //   console.log("Bounds: " + map.getBounds());
+      // });
+
+      // //Remove a marker
+      // $("body").on("click", ".delete", function() {
+      //   var markerToDeleteID = parseInt($(this).attr('id'), 10);
+      //   map.eachLayer(function (layer) {
+      //     if (layer.options.title === 'marker' && layer._leaflet_id === markerToDeleteID) {
+      //         map.removeLayer(layer);
+      //         markers.removeLayer(layer);
+      //     }
+      //   });
+      // });
+
+
+      // // Create a marker on map click
+      // function onMapClick(event) {
+      //   var coords = event.latlng;
+      //   var newMarker = L.marker(coords, {title: 'marker', riseOnHover: true, draggable: true}).addTo(map);
+      //   var bounds = new L.latLngBounds();
+      //   newMarker
+      //     .bindPopup("<p><b>Check out this new marker!</b><br>It's coords are: " + coords + "!</p>" +
+      //       '<p>My id: ' + newMarker._leaflet_id + '</p>' +
+      //       '<br><button type="button" class="delete" id="' + newMarker._leaflet_id + '">Delete</button>')
+      //     .openPopup();
+      //   newMarker.on('dragend', function(event){
+      //       var updateMarker = event.target;
+      //       var updateCoords = updateMarker.getLatLng();
+      //       updateMarker.setLatLng(updateCoords,{riseOnHover:true, draggable:true}).bindPopup("<p><b>Check out this new marker!</b><br>It's coords are: " + updateCoords + "!</p>").update().openPopup();
+      //     });
+      // }
+
+      // map.on('click', onMapClick);
     </script>
+  </div>
+  <div class="counter">
+    <ul>
+      <% for (var i = 0; i < mapArray.length; i++) { %>
+      <li><%= mapArray[i].content %></li>
+      <% } %>
+    </ul>
   </div>
   </body>
 </html>

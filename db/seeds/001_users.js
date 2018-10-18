@@ -1,5 +1,8 @@
 exports.seed = function(knex, Promise) {
-  return knex('maps').del()
+  return knex('markers').del()
+    .then(function () {
+      return knex('maps').del();
+    })
     .then(function () {
       return knex('users').del();
     })
@@ -14,4 +17,3 @@ exports.seed = function(knex, Promise) {
       ]);
     });
 };
-
