@@ -25,6 +25,9 @@ app.get('/view', isAuthenticated, (req, res) => {
     res.render('map-view');
 });
 
+app.get('/new', isAuthenticated, (req, res) => {
+  res.render("map-new");
+});
 
 
 app.get("/:id",isAuthenticated, (req, res) => {
@@ -40,11 +43,6 @@ app.get("/:id",isAuthenticated, (req, res) => {
 app.get("/edit/:id", isAuthenticated, (req, res) => {
   //Display map edit form
 
-});
-
-
-app.get("/new", isAuthenticated, (req, res) => {
-//Display map edit form
 });
 
 
