@@ -4,6 +4,10 @@ const PORT = 8000;
 const bodyParser = require('body-parser')
 const cookieSession = require('cookie-session')
 
+app.use(cookieSession({
+  name: 'session',
+  keys: ['userID']
+}));
 // / = maps
 
 module.exports = (knex) => {
@@ -88,11 +92,11 @@ app.put('/:id', isAuthenticated, (req, res) => {
 
 
 // function that checks the user is logged in
-function isAuthenticated(req, res, next) {
-    if (req.params.id) {
+function isAuthenticated (req, res, next) {
+    if (req.session.userID) {
       return next();
     } else {
-      return next();
+      res.redirect('/');
     }
 
   }

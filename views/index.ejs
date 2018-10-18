@@ -20,13 +20,21 @@
   <body>
     <h1>WELCOME<br>TO<br>WIKI <i class="fas fa-map-marked-alt"></i> MAPS</h1>
     <div id="nav-buttons">
-      <form class="login" action="/login" method="GET">
-        <span><i class="fas fa-map-marker-alt"></i> Login <i class="fas fa-map-marker-alt"></i></span>
+
+      <span class="view-maps"><i class="fas fa-map-marker-alt"></i> View Maps <i class="fas fa-map-marker-alt"></i></span>
+      <span class="login-button"><i class="fas fa-map-marker-alt"></i> Login <i class="fas fa-map-marker-alt"></i></span>
+
+      <form class="login-form" action="/users/login" method="POST">
+        <input id="email" type="email" name="email" placeholder="e-mail@email.com" style="width: 300px">
+        <input id="password" type="password" name="password" placeholder="Password" style="width: 300px">
+        <input type="submit" value="Sign In">
       </form>
-      <form class="view-maps" action="/maps" method="GET">
-        <span><i class="fas fa-map-marker-alt"></i> View Maps <i class="fas fa-map-marker-alt"></i></span>
-      </form>
+
     </div>
+
+
+
+
 
 
   </body>
