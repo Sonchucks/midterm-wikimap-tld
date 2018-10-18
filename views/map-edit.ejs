@@ -60,7 +60,7 @@
       for(var loop = 0; loop < mapInfo.length; loop++) {
         var coordinates = mapInfo[loop].coords;
         var content = mapInfo[loop].content;
-        var marker = L.marker(coordinates, {title: 'marker', riseOnHover: true}).addTo(map);
+        var marker = L.marker(coordinates, {title: 'marker', riseOnHover: true, draggable: true}).addTo(map);
         marker
           .bindPopup(content+ '<br><button type="button" class="delete" id="' + marker._leaflet_id + '">Delete</button>'
             + '<button type="button" class="edit" id="' + marker._leaflet_id + '">Edit</button>');
