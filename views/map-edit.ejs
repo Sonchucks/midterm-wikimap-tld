@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Home Page</title>
+
+    <link rel="stylesheet" href="/vendor/normalize-4.1.1.css" type="text/css" />
+    <link rel="stylesheet" href="/vendor/border-box.css" type="text/css" />
+    <link rel="stylesheet" href="/styles/map-view-layout.css" type="text/css" />
+    <link rel="stylesheet" href="/styles/modal.css" type="text/css" />
+
+    <!-- Imports Leaflet Stylesheet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css"
+   integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+   crossorigin=""/>
+
+   <!-- Imports Leaflet JS -->
+   <!-- THIS MUST BE PLACED BEFORE APP.JS AND AFTER THE LEAFLET STYLESHEET -->
+    <script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js"
+   integrity="sha512-nMMmRyTVoLYqjP9hrbed9S+FzjZHW5gY1TWCHA5ckwXZBadntCNs8kEqAWdrb9O7rxbCaA4lKTIWjDXZxflOcA=="
+   crossorigin=""></script>
+
+    <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script>
+  </head>
+
+  <body>
+    <nav id="nav-bar">
+      <span class="header"></span>
+      <div class="main">
+        <button type="button">Main Page</button>
+      </div>
+      <div class="modal">
+        <div class="modal-content">
+          <button class="close-modal">✖</button>
+          <p></p>
+          <form class="modal-input">
+            <textarea placeholder="Enter your new text here..."></textarea>
+            <button type="button" class="update-marker">Update</button>
+          </form>
+        </div>
+      </div>
+    </nav>
+
+    <div id="mapid">
+    <script>
+
+      var map = L.map('mapid').setView([45.500538, -73.644471], 13);
+      var markers = new L.featureGroup();
+
+      L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}',
+      {
+        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        maxZoom: 18,
+        id: 'mapbox.streets',
+        accessToken: 'pk.eyJ1IjoibG91aXNyaWVobCIsImEiOiJjam5kZjFzMTgyNjRqM3FvZXl4Y3ZyMXNuIn0.yLWkT311ioY116MNtVmy0A'
+      }).addTo(map);
+
+      var mapInfo = <%- JSON.stringify(mapArray)%>;
+      console.log(mapInfo[0].coords);
+
+      for(var loop = 0; loop < mapInfo.length; loop++) {
+        var coordinates = mapInfo[loop].coords;
+        var content = mapInfo[loop].content;
+        var marker = L.marker(coordinates, {title: 'marker', riseOnHover: true}).addTo(map);
+        marker
+          .bindPopup(content+ '<br><button type="button" class="delete" id="' + marker._leaflet_id + '">Delete</button>'
+            + '<button type="button" class="edit" id="' + marker._leaflet_id + '">Edit</button>');
+        markers.addLayer(marker);
+      }
+      var newBounds = markers.getBounds();
+      map.fitBounds(newBounds, {padding: [50,50]});
+
+      //Remove a marker
+      $("body").on("click", ".delete", function() {
+        var markerToDeleteID = parseInt($(this).attr('id'), 10);
+        map.eachLayer(function (layer) {
+          if (layer.options.title === 'marker' && layer._leaflet_id === markerToDeleteID) {
+              map.removeLayer(layer);
+              markers.removeLayer(layer);
+          }
+        });
+      });
+
+      $("body").on("click", ".edit", function() {
+        var markerToEditID = parseInt($(this).attr('id'), 10);
+        $('.modal').data('marker_id', markerToEditID).show();
+        $('.modal p').text(markerToEditID);
+        map.closePopup();
+        markers.eachLayer(function (layer) {
+          if (layer._leaflet_id === markerToEditID) {
+            console.log(".edit has matched");
+            $('.modal p').text(htmlWiper(layer._popup._content));
+          }
+        });
+      });
+
+      $("body").on("click", ".update-marker", function() {
+        var newContent = $(this).prev('textarea').val();
+        console.log(newContent + "is the new content");
+        console.log($('.modal').data('marker_id') + " is the marker to edit!");
+        $(this).prev('textarea').val("");
+        markers.eachLayer(function (layer) {
+          if (layer._leaflet_id === $('.modal').data('marker_id')) {
+            console.log(".update has matched!");
+            layer._popup._content = newContent + '<br><button type="button" class="delete" id="' + layer._leaflet_id + '">Delete</button>' +
+            '<button type="button" class="edit" id="' + layer._leaflet_id + '">Edit</button>';
+          }
+        });
+        $('.modal').hide();
+      });
+
+      $("body").on("click", ".close-modal", function() {
+        $('.modal').hide();
+      });
+
+      // Create a marker on map click
+      function onMapClick(event) {
+        var coords = event.latlng;
+        var newMarker = L.marker(coords, {title: 'marker', riseOnHover: true, draggable: true}).addTo(map);
+        var bounds = new L.latLngBounds();
+        newMarker
+          .bindPopup('This is a new marker!<br><button type="button" class="delete" id="' + newMarker._leaflet_id + '">Delete</button>' +
+            '<button type="button" class="edit" id="' + newMarker._leaflet_id + '">Edit</button>')
+          .openPopup();
+        markers.addLayer(newMarker);
+      }
+
+      function htmlWiper(content) {
+        if (!content) {
+          return "Add a description for this marker!";
+        }
+        var cleanedContent = content.replace(/\<(.*?)\>/g, "")
+          .replace(/Edit/g, "")
+          .replace(/Delete/g, "");
+        return cleanedContent;
+      }
+
+      map.on('click', onMapClick);
+    </script>
+  </div>
+  </body>
+</html>
