@@ -37,9 +37,8 @@ module.exports = (knex) => {
     });
   });
 
+  // -- Show a map in detail
   app.get("/:id",isAuthenticated, (req, res) => {
-    //-See one map in detail with option to edit
-    //Click markers to get more information about locations
     let mapDetails = {};
     knex("markers")
     .join('maps', 'markers.map_id', '=', 'maps.id')
@@ -53,20 +52,40 @@ module.exports = (knex) => {
       } else {
         let mapArray = mapDetails.map( (element) => {
           return {
+            name: element.name,
+            description: element.description,
             coords: element.coords,
             content: element.content
           };
         });
-
-        console.log(mapArray);
         res.render('map-view', {mapArray});
       }
     });
-
   });
 
   app.get("/edit/:id", isAuthenticated, (req, res) => {
-
+    let mapDetails = {};
+    knex("markers")
+    .join('maps', 'markers.map_id', '=', 'maps.id')
+    .join('users', 'maps.creator_id', '=', 'users.id')
+    .select("*")
+    .where("maps.id", req.params.id)
+    .then((mapDetails) => {
+      if (mapDetails.length === 0) {
+        res.status(404);
+        res.send();
+      } else {
+        let mapArray = mapDetails.map( (element) => {
+          return {
+            name: element.name,
+            description: element.description,
+            coords: element.coords,
+            content: element.content
+          };
+        });
+        res.render('map-edit', {mapArray});
+      }
+    });
   });
 
 
