@@ -8,7 +8,7 @@ const cookieSession = require('cookie-session')
 
 module.exports = (knex) => {
 
-  
+
 app.get("/", isAuthenticated, (req, res) => {
   knex
   .select("*")
@@ -29,6 +29,15 @@ app.get('/new', isAuthenticated, (req, res) => {
   res.render("map-new");
 });
 
+app.get('/api', (req, res) => {
+  knex("markers")
+  .join('maps', 'markers.map_id', '=', 'maps.id')
+  .join('users', 'maps.creator_id', '=', 'users.id')
+  .select("*")
+  .then((markers) => {
+    res.json(markers);
+  });
+});
 
 app.get("/:id",isAuthenticated, (req, res) => {
 
@@ -41,9 +50,9 @@ app.get("/:id",isAuthenticated, (req, res) => {
 });
 
 app.get("/edit/:id", isAuthenticated, (req, res) => {
-  //Display map edit form
 
 });
+
 
 
 app.post('/', isAuthenticated, (req, res) => {
