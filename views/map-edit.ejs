@@ -30,13 +30,8 @@
       </div>
       <div class="modal">
         <div class="modal-content">
-          <button class="close-modal">Close</button>
-          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-          tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-          quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-          consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-          cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-          proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+          <button class="close-modal">✖</button>
+          <p></p>
         </div>
       </div>
     </nav>
@@ -71,12 +66,12 @@
         console.log(coordinates, content);
         var marker = L.marker(coordinates, {title: 'marker', riseOnHover: true}).addTo(map);
         marker
-          .bindPopup("<p>" + content + "</p>"+ '<br><button type="button" class="delete" id="' + marker._leaflet_id + '">Delete</button>'
+          .bindPopup(content+ '<br><button type="button" class="delete" id="' + marker._leaflet_id + '">Delete</button>'
             + '<button type="button" class="edit" id="' + marker._leaflet_id + '">Edit</button>');
         markers.addLayer(marker);
       }
-        var newBounds = markers.getBounds();
-        map.fitBounds(newBounds, {padding: [50,50]});
+      var newBounds = markers.getBounds();
+      map.fitBounds(newBounds, {padding: [50,50]});
 
       //Remove a marker
       $("body").on("click", ".delete", function() {
@@ -91,7 +86,17 @@
 
       $("body").on("click", ".edit", function() {
         var markerToEditID = parseInt($(this).attr('id'), 10);
-        console.log('Edit popup of marker ' + markerToEditID);
+        $('.modal').data('marker_id', markerToEditID).show();
+        map.eachLayer(function (layer) {
+          if (layer.options.title === 'marker' && layer._leaflet_id === markerToEditID) {
+              $('.modal p').text(layer._leaflet_id);
+          }
+        });
+
+      });
+
+      $("body").on("click", ".close-modal", function() {
+        $('.modal').hide();
       });
 
       // Create a marker on map click
