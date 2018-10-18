@@ -11,9 +11,6 @@ $(() => {
 
 // go to views on click
 $( document ).ready(function() {
-  $('.list').click(function() {
-    alert( "Handler for .click() called." );
-    });
-    
+  alert( "Handler for .click() called." );
   });
 

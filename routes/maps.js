@@ -48,13 +48,20 @@ app.get("/:id",isAuthenticated, (req, res) => {
   .join('users', 'maps.creator_id', '=', 'users.id')
   .select("*")
   .where("maps.id", req.params.id)
-  .then((markers) => {
-    if (markers.length === 0) {
+  .then((mapDetails) => {
+    if (mapDetails.length === 0) {
       res.status(404);
       res.send();
     } else {
-    mapDetails = markers;
-    res.json(mapDetails);
+      let mapArray = mapDetails.map( (element) => {
+        return {
+          coords: element.coords,
+          content: element.content
+        };
+      });
+
+      console.log(mapArray);
+      res.render('map-view', {mapArray});
     }
   });
 
