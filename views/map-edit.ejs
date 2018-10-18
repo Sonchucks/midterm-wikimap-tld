@@ -85,8 +85,8 @@
         $('.modal').data('marker_id', markerToEditID).show();
         $('.modal p').text(markerToEditID);
         map.closePopup();
-        map.eachLayer(function (layer) {
-          if (layer.options.title === 'marker' && layer._leaflet_id === markerToEditID) {
+        markers.eachLayer(function (layer) {
+          if (layer._leaflet_id === markerToEditID) {
             console.log(".edit has matched");
             $('.modal p').text(htmlWiper(layer._popup._content));
           }
@@ -122,11 +122,6 @@
             '<button type="button" class="edit" id="' + newMarker._leaflet_id + '">Edit</button>')
           .openPopup();
         markers.addLayer(newMarker);
-        // newMarker.on('dragend', function(event){
-        //     var updateMarker = event.target;
-        //     var updateCoords = updateMarker.getLatLng();
-        //     updateMarker.setLatLng(updateCoords,{riseOnHover:true, draggable:true}).bindPopup("<p><b>Check out this new marker!</b><br>It's coords are: " + updateCoords + "!</p>").update().openPopup();
-        //   });
       }
 
       function htmlWiper(content) {
