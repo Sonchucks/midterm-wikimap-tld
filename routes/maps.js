@@ -40,12 +40,23 @@ app.get('/api', (req, res) => {
 });
 
 app.get("/:id",isAuthenticated, (req, res) => {
-
-
   //-See one map in detail with option to edit
   //Click markers to get more information about locations
-
-  res.json({id: req.params.id})
+  let mapDetails = {};
+  knex("markers")
+  .join('maps', 'markers.map_id', '=', 'maps.id')
+  .join('users', 'maps.creator_id', '=', 'users.id')
+  .select("*")
+  .where("maps.id", req.params.id)
+  .then((markers) => {
+    if (markers.length === 0) {
+      res.status(404);
+      res.send();
+    } else {
+    mapDetails = markers;
+    res.json(mapDetails);
+    }
+  });
 
 });
 
