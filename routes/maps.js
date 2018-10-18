@@ -8,6 +8,7 @@ const cookieSession = require('cookie-session')
 
 module.exports = (knex) => {
 
+  
 app.get("/", isAuthenticated, (req, res) => {
   knex
   .select("*")
