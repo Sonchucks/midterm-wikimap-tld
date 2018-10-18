@@ -8,7 +8,10 @@ exports.seed = function(knex, Promise) {
     .then(function () {
       return Promise.all([
         // Inserts seed entries
-        knex('markers').insert({description: 'This marker is on Mount Royal! Neat!', coords: [45.501895, -73.602819], map_id: 1})
+        knex('markers').insert({content: 'This marker is on Mount Royal! Neat!', coords: [45.501895, -73.602819], map_id: 1}),
+        knex('markers').insert({content: 'This marker is somewhere else!', coords: [55.501895, -74.602819], map_id: 1}),
+        knex('markers').insert({content: 'Where is this marker?', coords: [60.50, -83.602819], map_id: 2}),
+        knex('markers').insert({content: 'I have a marker too!', coords: [80.501895, -10.602819], map_id: 3})
       ]);
     });
 };
