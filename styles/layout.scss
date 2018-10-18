@@ -22,10 +22,30 @@ body {
       .login {
         margin-bottom: 1em;
         align-self: center;
+
+        i {
+          visibility: hidden;
+        }
+      }
+
+      .login:hover {
+        i {
+          visibility: visible;
+        }
       }
 
       .view-maps {
         align-self: center;
+
+        i {
+          visibility: hidden;
+        }
+      }
+
+      .view-maps:hover {
+        i {
+          visibility: visible;
+        }
       }
   }
 }
