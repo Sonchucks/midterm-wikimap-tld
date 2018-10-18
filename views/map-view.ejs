@@ -29,12 +29,37 @@
       </div>
       <div class="">
         <button type="button">NEW MAP</button>
+        <button class="rezoom" type="button">Check array!</button>
+        <button class="showmap" type="button">Show the map object!</button>
       </div>
     </nav>
 
     <div id="mapid">
     <script>
       var myMap = L.map('mapid').setView([51.505, -0.09], 13);
+      var markers = new L.FeatureGroup();
+
+      $(".rezoom").on('click', function () {
+        myMap.eachLayer(function(layer){
+          if (layer.options.title === 'marker') {
+          markers.addLayer(layer);
+          console.log(layer.getLatLng());
+          console.log(layer._popup._content);
+          }
+        });
+        console.log(markers);
+        var newBounds = markers.getBounds();
+        myMap.fitBounds(newBounds, {padding: [10,10]});
+        myMap.setMaxBounds(newBounds);
+        var currentZoom = myMap.getZoom();
+        myMap.setMinZoom(currentZoom - 1);
+      });
+
+      $(".showmap").on('click', function () {
+        console.log("Center: " + myMap.getCenter());
+        console.log("Zoom: " + myMap.getZoom());
+        console.log("Bounds: " + myMap.getBounds());
+      });
 
       L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}',
       {
@@ -44,9 +69,10 @@
         accessToken: 'pk.eyJ1IjoibG91aXNyaWVobCIsImEiOiJjam5kZjFzMTgyNjRqM3FvZXl4Y3ZyMXNuIn0.yLWkT311ioY116MNtVmy0A'
       }).addTo(myMap);
 
-      function onMapClick(e) {
-        var coords = e.latlng;
-        var newMarker = L.marker(coords, {riseOnHover: true, draggable: true}).addTo(myMap);
+      function onMapClick(event) {
+        var coords = event.latlng;
+        var newMarker = L.marker(coords, {title: 'marker', riseOnHover: true, draggable: true}).addTo(myMap);
+        var bounds = new L.latLngBounds();
         newMarker
           .bindPopup("<p><b>Check out this new marker!</b><br>It's coords are: " + coords + "!</p>")
           .openPopup();
