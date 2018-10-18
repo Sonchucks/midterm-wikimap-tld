@@ -66,9 +66,12 @@
         marker
           .bindPopup("<p>" + content + "</p>");
         markers.addLayer(marker);
-        var newBounds = markers.getBounds();
-        map.fitBounds(newBounds, {padding: [10,10]});
+        // var currentZoom = map.getZoom();
+        // map.setMinZoom(currentZoom);
       }
+        var newBounds = markers.getBounds();
+        map.fitBounds(newBounds, {padding: [50,50]});
+        map.setMinZoom(map.getZoom());
 
       // // Refocus the map based on the marker group bounds
       // // This will mock when a new page is rendered to restrict the zoom if desired

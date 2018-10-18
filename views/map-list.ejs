@@ -32,12 +32,12 @@
 
     <main>
       <% for(var i = 0; i < maps.length; i++) { %>
-        <form class='list' action="/maps/<%= maps[i].id %>" method="GET">
+        <a href="maps/<%= maps[i].id %>">
           <span class="title"><%= maps[i].name %></span>
           <span class="description">
-            <%= maps[i].description%></a>
+            <%= maps[i].description%>
           </span>
-        </form>
+        </a>
       <% } %>
     </main>
   </body>
