@@ -51,7 +51,7 @@ app.get("/", (req, res) => {
 
 // login page
 app.get("/login" , (req, res) => {
-  res.render('map-list');
+  res.redirect('/maps');
 });
 
 app.get('/user/:id', (req, res) => {
