@@ -39,6 +39,7 @@ app.get('/api', (req, res) => {
   });
 });
 
+
 app.get("/:id",isAuthenticated, (req, res) => {
   //-See one map in detail with option to edit
   //Click markers to get more information about locations
@@ -61,16 +62,41 @@ app.get("/:id",isAuthenticated, (req, res) => {
 });
 
 app.get("/edit/:id", isAuthenticated, (req, res) => {
-
+  // console.log("function is running")
+  // knex('maps')
+  // .where('id' , req.params.id)
+  // .then((sql_data) => {
+  //    console.log("This is sql data:",sql_data);
+  // })
+  // .catch(function(error){
+  //   console.log("this is an error:",error)
+  //  })
+  //  .finally(()=> {
+  //    console.log('this is working')
+  //    knex.destory();
+  //  })
+  res.render('index')
 });
 
 
 
 app.post('/', isAuthenticated, (req, res) => {
-
-  //add a new map, redirect to
-
+  const newTitle = req.body.title
+  const newDesc = req.body.description
+  const userID = req.session.userID
+  knex.insert({
+    name: newTitle, 
+    description: newDesc,
+    creator_id: userID
+  }) 
+  .returning('id')
+  .into('maps')
+  .then(function (id) {
+    const mapID = id[0]
+    res.redirect(`/maps/edit/${mapID}`);
+  }); 
 });
+
 
 
 app.put('/:id', isAuthenticated, (req, res) => {
@@ -82,10 +108,10 @@ app.put('/:id', isAuthenticated, (req, res) => {
 
 // function that checks the user is logged in
 function isAuthenticated(req, res, next) {
-    if (req.params.id) {
+    if (req.session.userID) {
       return next();
     } else {
-      return next();
+      res.redirect('/');
     }
 
   }

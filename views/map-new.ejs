@@ -33,36 +33,10 @@
       <label for="title">Give your map a name!</label>
       <input id="title" type="text" name="title" placeholder="Enter your map name here!">
       <label for="description">Give a brief description of your map!</label>
-      <textarea class="textArea" name="text" placeholder="">What's your map all about?</textarea>
+      <textarea id="description" name="description" placeholder="">What's your map all about?</textarea>
 
 
-    <div id="mapid">
-      <script>
-        var myMap = L.map('mapid').setView([51.505, -0.09], 13);
 
-        L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}',
-        {
-          attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-          maxZoom: 18,
-          id: 'mapbox.streets',
-          accessToken: 'pk.eyJ1IjoibG91aXNyaWVobCIsImEiOiJjam5kZjFzMTgyNjRqM3FvZXl4Y3ZyMXNuIn0.yLWkT311ioY116MNtVmy0A'
-        }).addTo(myMap);
-
-        function onMapClick(e) {
-          var coords = e.latlng;
-          var newMarker = L.marker(coords, {riseOnHover: true, draggable: true}).addTo(myMap);
-          newMarker
-            .bindPopup("<p><b>Check out this new marker!</b><br>It's coords are: " + coords + "!</p>")
-            .openPopup();
-          newMarker.on('dragend', function(event){
-              var updateMarker = event.target;
-              var updateCoords = updateMarker.getLatLng();
-              updateMarker.setLatLng(updateCoords,{riseOnHover:true, draggable:true}).bindPopup("<p><b>Check out this new marker!</b><br>It's coords are: " + updateCoords + "!</p>").update().openPopup();
-            });
-        }
-        myMap.on('click', onMapClick);
-      </script>
-    </div>
 
     <input type="submit" value="Make Map">
     </form>
