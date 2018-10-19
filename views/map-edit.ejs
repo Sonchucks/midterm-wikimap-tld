@@ -83,6 +83,8 @@
               markers.removeLayer(layer);
           }
         });
+        delete markerData[markerToDeleteID];
+        console.log(markerData);
       });
 
       $("body").on("click", ".edit", function() {
@@ -90,13 +92,7 @@
         $('.modal').data('marker_id', markerToEditID).show();
         $('.modal p').text(markerToEditID);
         map.closePopup();
-        // $('.modal p').text(markerData[markerToEditID].content);
-        markers.eachLayer(function (layer) {
-          if (layer._leaflet_id === markerToEditID) {
-            console.log(".edit has matched");
-            $('.modal p').text(htmlWiper(layer._popup._content));
-          }
-        });
+        $('.modal p').text(markerData[markerToEditID].content);
       });
 
       $("body").on("click", ".update-marker", function() {
