@@ -28,6 +28,7 @@
       <div class="main">
         <button type="button">Main Page</button>
       </div>
+
       <div class="modal">
         <div class="modal-content">
           <button class="close-modal">✖</button>
@@ -149,7 +150,16 @@
       }
 
       map.on('click', onMapClick);
+      $('document').ready(function() {
+        $(".finish").find('button').click(function () {
+          console.log(markerData);
+          $.ajax('/maps/<%= mapID.id %>', {method: 'PUT'});
+        });
+      })
     </script>
+  </div>
+  <div class="finish">
+    <button type="button">Finish Editing</button>
   </div>
   </body>
 </html>

@@ -80,6 +80,7 @@ module.exports = (knex) => {
         res.status(404);
         res.send();
       } else {
+        let mapID = {id: req.params.id};
         let mapArray = mapDetails.map( (element) => {
           return {
             name: element.name,
@@ -88,7 +89,7 @@ module.exports = (knex) => {
             content: element.content
           };
         });
-        res.render('map-edit', {mapArray});
+        res.render('map-edit', {mapArray, mapID});
       }
     });
   });
@@ -103,8 +104,12 @@ module.exports = (knex) => {
 
 
   app.put('/:id', isAuthenticated, (req, res) => {
-    // Updates map redirect to :id
-    res.redirect("/:id")
+    if(!req.params.body) {
+      res.status(400);
+      res.send();
+    } else {
+      res.redirect("/:id");
+    }
   });
 
 
