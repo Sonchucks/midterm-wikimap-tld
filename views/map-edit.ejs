@@ -45,7 +45,7 @@
 
       var map = L.map('mapid').setView([45.500538, -73.644471], 13);
       var markers = new L.featureGroup();
-      var markerData = [];
+      var markerData = {};
 
       L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}',
       {
@@ -65,13 +65,10 @@
           .bindPopup(content+ '<br><button type="button" class="delete" id="' + marker._leaflet_id + '">Delete</button>'
             + '<button type="button" class="edit" id="' + marker._leaflet_id + '">Edit</button>');
         markers.addLayer(marker);
-        var markerObject = {
-          [marker._leaflet_id]: {
+        markerData[marker._leaflet_id] = {
             content: content,
             coords: coordinates
-          }
-        };
-        markerData.push(markerObject);
+          };
       }
       console.log(markerData);
       var newBounds = markers.getBounds();
@@ -93,6 +90,7 @@
         $('.modal').data('marker_id', markerToEditID).show();
         $('.modal p').text(markerToEditID);
         map.closePopup();
+        // $('.modal p').text(markerData[markerToEditID].content);
         markers.eachLayer(function (layer) {
           if (layer._leaflet_id === markerToEditID) {
             console.log(".edit has matched");
@@ -130,13 +128,11 @@
             '<button type="button" class="edit" id="' + newMarker._leaflet_id + '">Edit</button>')
           .openPopup();
         markers.addLayer(newMarker);
-        var markerObject = {
-          [newMarker._leaflet_id]: {
+        markerData[newMarker._leaflet_id]=
+          {
             content: "This is a new marker!",
             coords: coords
-          }
-        };
-        markerData.push(markerObject);
+          };
         console.log(markerData);
       }
 
