@@ -98,7 +98,7 @@
       });
 
       $("body").on("click", ".update-marker", function() {
-        var newContent = $(this).prev('textarea').val();
+        var newContent = htmlWiper($(this).prev('textarea').val());
         var updateMarkerID = $('.modal').data('marker_id');
         $(this).prev('textarea').val("");
         markerData[updateMarkerID].content = newContent;
