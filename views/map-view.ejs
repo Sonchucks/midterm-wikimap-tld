@@ -28,9 +28,16 @@
       <div class="map-list">
         <button type="button">Back to List</button>
       </div>
-      <div class="edit">
-        <button type="button">Edit</button>
-      </div>
+
+      <% if (id) { %>
+
+      <form class="edit" action="/maps/edit/<%= mapID %>" method="GET">
+        <input type="submit" value="EDIT"></input>
+      </form>
+
+      <% } %>
+
+
     </nav>
 
     <div class="map">

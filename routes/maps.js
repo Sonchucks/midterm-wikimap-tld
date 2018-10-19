@@ -12,14 +12,15 @@ app.use(cookieSession({
 
 module.exports = (knex) => {
 
-  app.get("/", isAuthenticated, (req, res) => {
+  app.get("/", (req, res) => {
+    const id = req.session.userID;
+
     knex
     .select("*")
     .from("maps")
     .then((maps) => {
       console.log(maps);
-      res.render('map-list', {maps});
-
+      res.render('map-list', {maps, id});
     });
   });
 
@@ -42,7 +43,10 @@ module.exports = (knex) => {
   });
 
   // -- Show a map in detail
-  app.get("/:id",isAuthenticated, (req, res) => {
+  app.get("/:id", (req, res) => {
+    const id = req.session.userID;
+    const mapID = req.params.id
+
     let mapDetails = {};
     knex("markers")
     .join('maps', 'markers.map_id', '=', 'maps.id')
@@ -62,7 +66,7 @@ module.exports = (knex) => {
             content: element.content
           };
         });
-        res.render('map-view', {mapArray});
+        res.render('map-view', {mapArray, id, mapID});
       }
     });
   });

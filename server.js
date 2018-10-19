@@ -55,20 +55,20 @@ app.get("/", (req, res) => {
   res.render("index");
 });
 
+app.post('/logout', (req, res) => {
+  req.session = null;
+  res.redirect('/');
+})
+
 // login page
 app.get("/login" , (req, res) => {
-  res.redirect('/maps');
+  res.redirect('/');
 });
 
 app.get('/user/:id', (req, res) => {
   //display user profile
 
 })
-
-app.get("/login/:id" , (req, res) => {
-  req.session.userID = req.params.id;
-  res.redirect('/maps')
-});
 
 app.listen(PORT, () => {
   console.log("Example app listening on port " + PORT);

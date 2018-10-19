@@ -13,8 +13,4 @@ $( document ).ready(function() {
     window.location = "/maps";
   });
 
-  $('.edit').click(function() {
-    window.location = "/";
-  });
-
 });
