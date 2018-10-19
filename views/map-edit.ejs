@@ -75,13 +75,9 @@
           };
       }
 
-      if (!mapInfo) {
-        var newBounds = map.getBounds();
-        console.log("mapInfo doesn't exist! This must be a new map...")
-      } else {
+      if (mapInfo.length !== 0) {
         var newBounds = markers.getBounds();
         map.fitBounds(newBounds, {padding: [50,50]});
-        console.log("mapInfo DOES exist! This map already existed!")
       }
 
       //Remove a marker

@@ -55,7 +55,6 @@
       }).addTo(map);
 
       var mapInfo = <%- JSON.stringify(mapArray)%>;
-      console.log(<%= mapID.id %>);
 
       for(var loop = 0; loop < mapInfo.length; loop++) {
         var coordinates = mapInfo[loop].coords;
@@ -65,9 +64,11 @@
           .bindPopup("<p>" + content + "</p>");
         markers.addLayer(marker);
       }
-      var newBounds = markers.getBounds();
-      map.fitBounds(newBounds, {padding: [50,50]});
-      map.setMinZoom(map.getZoom());
+
+      if (mapInfo.length !== 0) {
+        var newBounds = markers.getBounds();
+        map.fitBounds(newBounds, {padding: [50,50]});
+      }
 
     </script>
   </div>

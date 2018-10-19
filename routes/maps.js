@@ -65,6 +65,7 @@ module.exports = (knex) => {
       });
   });
 
+  // -- Edit a saved map
   app.get("/edit/:id", isAuthenticated, (req, res) => {
     let mapDetails = {};
     knex("markers")
@@ -86,8 +87,6 @@ module.exports = (knex) => {
       });
   });
 
-
-
   app.post('/', isAuthenticated, (req, res) => {
     const newTitle = req.body.title;
     const newDesc = req.body.description;
@@ -102,7 +101,7 @@ module.exports = (knex) => {
       .into('maps')
       .then(function (id) {
         const mapID = id[0];
-        res.redirect(`/maps`);
+        res.redirect(`/maps/edit/${mapID}`);
       });
 });
 
@@ -134,17 +133,6 @@ module.exports = (knex) => {
               });
           }
         });
-
-        // .then(function () {
-        //   var updates = req.body.update;
-        //   console.log(updates);
-        //   return knex('markers')
-        //   .insert(
-        //     {content: updates.content,
-        //     coords: updates.coords,
-        //     map_id: req.params.id}
-        //     );
-        // });
     }
   });
 
