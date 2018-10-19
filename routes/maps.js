@@ -121,7 +121,8 @@ module.exports = (knex) => {
     .returning("id")
     .into("favorites")
     .then(function (id) {
-      res.redirect(`/maps/${mapId}`);
+      console.log('added to favorites')
+      res.status(201).send({msg: "This is working"});
     }); 
 
   });
