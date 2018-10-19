@@ -17,7 +17,7 @@ module.exports = (knex) => {
     .select("*")
     .from("maps")
     .then((maps) => {
-      console.log(maps);
+      // console.log(maps);
       res.render('map-list', {maps});
 
     });
@@ -104,11 +104,43 @@ module.exports = (knex) => {
 
 
   app.put('/:id', isAuthenticated, (req, res) => {
-    if(!req.params.body) {
+    if(!req.body.update) {
       res.status(400);
       res.send();
     } else {
-      res.redirect("/:id");
+      const updates = req.body.update;
+      console.log(updates);
+      res.status(201);
+      res.send();
+
+      knex('markers')
+        .where('map_id', req.params.id)
+        .del()
+        .then( () => {
+          for (let element of updates) {
+            console.log(element.content);
+            knex('markers')
+              .insert({
+                content: element.content,
+                coords: element.coords,
+                map_id: req.params.id
+              })
+              .then(function (row) {
+                console.log(row.rowCount);
+              });
+          }
+        });
+
+        // .then(function () {
+        //   var updates = req.body.update;
+        //   console.log(updates);
+        //   return knex('markers')
+        //   .insert(
+        //     {content: updates.content,
+        //     coords: updates.coords,
+        //     map_id: req.params.id}
+        //     );
+        // });
     }
   });
 
