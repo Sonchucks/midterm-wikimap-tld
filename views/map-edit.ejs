@@ -72,7 +72,6 @@
             coords: coordinates
           };
       }
-      console.log(markerData);
       var newBounds = markers.getBounds();
       map.fitBounds(newBounds, {padding: [50,50]});
 
@@ -86,7 +85,6 @@
           }
         });
         delete markerData[markerToDeleteID];
-        console.log(markerData);
       });
 
       $("body").on("click", ".edit", function() {
@@ -109,7 +107,6 @@
           }
         });
         $('.modal').hide();
-        console.log(markerData);
       });
 
       $("body").on("click", ".close-modal", function() {
