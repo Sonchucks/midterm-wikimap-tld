@@ -24,7 +24,7 @@ module.exports = (knex) => {
   });
 
   app.get('/view', isAuthenticated, (req, res) => {
-      res.render('map-view');
+      res.redirect('/maps');
   });
 
   app.get('/new', isAuthenticated, (req, res) => {
@@ -54,6 +54,7 @@ module.exports = (knex) => {
         res.status(404);
         res.send();
       } else {
+        let mapID = {id: req.params.id};
         let mapArray = mapDetails.map( (element) => {
           return {
             name: element.name,
@@ -62,7 +63,7 @@ module.exports = (knex) => {
             content: element.content
           };
         });
-        res.render('map-view', {mapArray});
+        res.render('map-view', {mapArray, mapID});
       }
     });
   });
