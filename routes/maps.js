@@ -155,6 +155,27 @@ module.exports = (knex) => {
   });
 
 
+  app.post('/:id/favorites', isAuthenticated, (req, res) => {
+    const userId = req.session.userID;
+    const mapId =  req.params.id;
+    
+    console.log("These are my vars", userId, mapId);
+
+
+    knex.insert({
+      user_id: userId,
+      map_id: mapId
+    })
+    .returning("id")
+    .into("favorites")
+    .then(function (id) {
+      console.log('added to favorites')
+      res.status(201).send({msg: "This is working"});
+    }); 
+
+  });
+
+
 // function that checks the user is logged in
 function isAuthenticated (req, res, next) {
     if (req.session.userID) {
