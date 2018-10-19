@@ -29,15 +29,14 @@
         <button type="button">Back to List</button>
       </div>
       <div class="edit">
-        <form method="GET" action="/maps/edit/<%= mapID.id%>">
-        <button type="submit">Edit</button>
+        <button type="button">Edit</button>
       </div>
     </nav>
 
     <div id="mapid">
     <script>
 
-      var map = L.map('mapid').setView([45.500538, -73.644471], 13);
+      var map = L.map('mapid').setView([0, 0], 13);
       var markers = new L.FeatureGroup();
 
       L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}',
@@ -59,9 +58,9 @@
           .bindPopup("<p>" + content + "</p>");
         markers.addLayer(marker);
       }
-        var newBounds = markers.getBounds();
-        map.fitBounds(newBounds, {padding: [50,50]});
-        map.setMinZoom(map.getZoom());
+      var newBounds = markers.getBounds();
+      map.fitBounds(newBounds, {padding: [50,50]});
+      map.setMinZoom(map.getZoom());
 
     </script>
   </div>
