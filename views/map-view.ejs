@@ -29,7 +29,8 @@
         <button type="button">Back to List</button>
       </div>
       <div class="edit">
-        <button type="button">Edit</button>
+        <form method="GET" action="/maps/edit/<%= mapID.id%>">
+        <button type="submit">Edit</button>
       </div>
     </nav>
 
@@ -48,6 +49,7 @@
       }).addTo(map);
 
       var mapInfo = <%- JSON.stringify(mapArray)%>;
+      console.log(<%= mapID.id %>);
 
       for(var loop = 0; loop < mapInfo.length; loop++) {
         var coordinates = mapInfo[loop].coords;
