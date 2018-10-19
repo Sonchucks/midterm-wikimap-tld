@@ -19,7 +19,6 @@ module.exports = (knex) => {
     .select("*")
     .from("maps")
     .then((maps) => {
-      // console.log(maps);
       res.render('map-list', {maps, id});
     });
   });
@@ -53,10 +52,6 @@ module.exports = (knex) => {
     .select("*")
     .where("maps.id", req.params.id)
     .then((mapDetails) => {
-      if (mapDetails.length === 0) {
-        res.status(404);
-        res.send();
-      } else {
         let mapID = {id: req.params.id};
         let mapArray = mapDetails.map( (element) => {
           return {
@@ -67,8 +62,7 @@ module.exports = (knex) => {
           };
         });
         res.render('map-view', {mapArray, id, mapID});
-      }
-    });
+      });
   });
 
   app.get("/edit/:id", isAuthenticated, (req, res) => {
