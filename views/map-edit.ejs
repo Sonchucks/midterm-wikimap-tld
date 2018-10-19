@@ -45,6 +45,7 @@
 
       var map = L.map('mapid').setView([45.500538, -73.644471], 13);
       var markers = new L.featureGroup();
+      var markerData = {};
 
       L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}',
       {
@@ -55,17 +56,21 @@
       }).addTo(map);
 
       var mapInfo = <%- JSON.stringify(mapArray)%>;
-      console.log(mapInfo[0].coords);
 
       for(var loop = 0; loop < mapInfo.length; loop++) {
         var coordinates = mapInfo[loop].coords;
         var content = mapInfo[loop].content;
         var marker = L.marker(coordinates, {title: 'marker', riseOnHover: true, draggable: true}).addTo(map);
         marker
-          .bindPopup(content+ '<br><button type="button" class="delete" id="' + marker._leaflet_id + '">Delete</button>'
+          .bindPopup('<p>' + content + '</p><br><button type="button" class="delete" id="' + marker._leaflet_id + '">Delete</button>'
             + '<button type="button" class="edit" id="' + marker._leaflet_id + '">Edit</button>');
         markers.addLayer(marker);
+        markerData[marker._leaflet_id] = {
+            content: content,
+            coords: coordinates
+          };
       }
+      console.log(markerData);
       var newBounds = markers.getBounds();
       map.fitBounds(newBounds, {padding: [50,50]});
 
@@ -78,6 +83,8 @@
               markers.removeLayer(layer);
           }
         });
+        delete markerData[markerToDeleteID];
+        console.log(markerData);
       });
 
       $("body").on("click", ".edit", function() {
@@ -85,27 +92,25 @@
         $('.modal').data('marker_id', markerToEditID).show();
         $('.modal p').text(markerToEditID);
         map.closePopup();
-        markers.eachLayer(function (layer) {
-          if (layer._leaflet_id === markerToEditID) {
-            console.log(".edit has matched");
-            $('.modal p').text(htmlWiper(layer._popup._content));
-          }
-        });
+        $('.modal p').text(markerData[markerToEditID].content);
       });
 
       $("body").on("click", ".update-marker", function() {
         var newContent = $(this).prev('textarea').val();
+        var updateMarkerID = $('.modal').data('marker_id');
         console.log(newContent + "is the new content");
-        console.log($('.modal').data('marker_id') + " is the marker to edit!");
+        console.log(updateMarkerID + " is the marker to edit!");
         $(this).prev('textarea').val("");
+        markerData[updateMarkerID].content = newContent;
         markers.eachLayer(function (layer) {
           if (layer._leaflet_id === $('.modal').data('marker_id')) {
             console.log(".update has matched!");
-            layer._popup._content = newContent + '<br><button type="button" class="delete" id="' + layer._leaflet_id + '">Delete</button>' +
+            layer._popup._content = '<p>' + newContent + '</p><br><button type="button" class="delete" id="' + layer._leaflet_id + '">Delete</button>' +
             '<button type="button" class="edit" id="' + layer._leaflet_id + '">Edit</button>';
           }
         });
         $('.modal').hide();
+        console.log(markerData);
       });
 
       $("body").on("click", ".close-modal", function() {
@@ -114,14 +119,20 @@
 
       // Create a marker on map click
       function onMapClick(event) {
-        var coords = event.latlng;
+        var coords = [event.latlng.lat, event.latlng.lng];
         var newMarker = L.marker(coords, {title: 'marker', riseOnHover: true, draggable: true}).addTo(map);
         var bounds = new L.latLngBounds();
         newMarker
-          .bindPopup('This is a new marker!<br><button type="button" class="delete" id="' + newMarker._leaflet_id + '">Delete</button>' +
+          .bindPopup('<p>This is a new marker!</p><br><button type="button" class="delete" id="' + newMarker._leaflet_id + '">Delete</button>' +
             '<button type="button" class="edit" id="' + newMarker._leaflet_id + '">Edit</button>')
           .openPopup();
         markers.addLayer(newMarker);
+        markerData[newMarker._leaflet_id]=
+          {
+            content: "This is a new marker!",
+            coords: coords
+          };
+        console.log(markerData);
       }
 
       function htmlWiper(content) {
