@@ -45,6 +45,7 @@
 
       var map = L.map('mapid').setView([45.500538, -73.644471], 13);
       var markers = new L.featureGroup();
+      var markerData = [];
 
       L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}',
       {
@@ -55,7 +56,6 @@
       }).addTo(map);
 
       var mapInfo = <%- JSON.stringify(mapArray)%>;
-      console.log(mapInfo[0].coords);
 
       for(var loop = 0; loop < mapInfo.length; loop++) {
         var coordinates = mapInfo[loop].coords;
@@ -65,7 +65,15 @@
           .bindPopup(content+ '<br><button type="button" class="delete" id="' + marker._leaflet_id + '">Delete</button>'
             + '<button type="button" class="edit" id="' + marker._leaflet_id + '">Edit</button>');
         markers.addLayer(marker);
+        var markerObject = {
+          [marker._leaflet_id]: {
+            content: content,
+            coords: coordinates
+          }
+        };
+        markerData.push(markerObject);
       }
+      console.log(markerData);
       var newBounds = markers.getBounds();
       map.fitBounds(newBounds, {padding: [50,50]});
 
@@ -114,7 +122,7 @@
 
       // Create a marker on map click
       function onMapClick(event) {
-        var coords = event.latlng;
+        var coords = [event.latlng.lat, event.latlng.lng];
         var newMarker = L.marker(coords, {title: 'marker', riseOnHover: true, draggable: true}).addTo(map);
         var bounds = new L.latLngBounds();
         newMarker
@@ -122,6 +130,14 @@
             '<button type="button" class="edit" id="' + newMarker._leaflet_id + '">Edit</button>')
           .openPopup();
         markers.addLayer(newMarker);
+        var markerObject = {
+          [newMarker._leaflet_id]: {
+            content: "This is a new marker!",
+            coords: coords
+          }
+        };
+        markerData.push(markerObject);
+        console.log(markerData);
       }
 
       function htmlWiper(content) {
