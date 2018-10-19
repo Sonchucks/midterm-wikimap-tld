@@ -28,7 +28,6 @@
       <span class="header"></span>
       <div class="map-list">
         <button type="button">Main Page</button>
-        <button type="button" class="debug">Debug</button>
       </div>
 
       <div class="modal">
@@ -75,8 +74,15 @@
             coords: coordinates
           };
       }
-      var newBounds = markers.getBounds();
-      map.fitBounds(newBounds, {padding: [50,50]});
+
+      if (!mapInfo) {
+        var newBounds = map.getBounds();
+        console.log("mapInfo doesn't exist! This must be a new map...")
+      } else {
+        var newBounds = markers.getBounds();
+        map.fitBounds(newBounds, {padding: [50,50]});
+        console.log("mapInfo DOES exist! This map already existed!")
+      }
 
       //Remove a marker
       $("body").on("click", ".delete", function() {
@@ -114,10 +120,6 @@
 
       $("body").on("click", ".close-modal", function() {
         $('.modal').hide();
-      });
-
-      $(".debug").click(function () {
-        console.log(markerData);
       });
 
       // Create a marker on map click
@@ -160,11 +162,15 @@
       // -- Send data once updates are completed
       $('document').ready(function() {
         $(".finish").find('button').click(function () {
-          var markerSubmit = Object.keys(markerData).map( function (markerID) {
-            return markerData[markerID];
-          })
-          $.ajax('/maps/<%= mapID.id %>', {method: 'PUT', data: {update: markerSubmit}});
-          console.log(markerSubmit);
+          if(Object.keys(markerData).length === 0) {
+            alert("Oops, your map needs to have at least one marker!");
+          } else {
+            var markerSubmit = Object.keys(markerData).map( function (markerID) {
+              return markerData[markerID];
+            })
+            $.ajax('/maps/<%= mapID.id %>', {method: 'PUT', data: {update: markerSubmit}});
+            console.log(markerSubmit);
+          }
         });
       });
 
