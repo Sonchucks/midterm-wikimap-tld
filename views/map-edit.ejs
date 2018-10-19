@@ -37,7 +37,9 @@
           <button class="close-modal">✖</button>
           <p></p>
           <form class="modal-input">
-            <textarea placeholder="Enter your new text here..."></textarea>
+            <textarea id="title" placeholder="Enter your new title here..."></textarea>
+            <textarea id="content" placeholder="Enter your new text here..."></textarea>
+            <textarea id="image" placeholder="Enter your new image url here..."></textarea>
             <button type="button" class="update-marker">Update</button>
           </form>
         </div>
@@ -70,7 +72,7 @@
           .addTo(map)
           .on('dragend', updateCoords);
         marker
-          .bindPopup('<b><p>' + title+ '</b>' + content + '</p><br><img src="' + image + '"><br><button type="button" class="delete" id="' + marker._leaflet_id + '">Delete</button>'
+          .bindPopup('<b><p>' + title+ '<br></b>' + content + '</p><br><img src="' + image + '"><br><button type="button" class="delete" id="' + marker._leaflet_id + '">Delete</button>'
             + '<button type="button" class="edit" id="' + marker._leaflet_id + '">Edit</button>');
         markers.addLayer(marker);
         markerData[marker._leaflet_id] = {
@@ -101,20 +103,25 @@
       $("body").on("click", ".edit", function() {
         var markerToEditID = parseInt($(this).attr('id'), 10);
         $('.modal').data('marker_id', markerToEditID).show();
-        $('.modal p').text(markerToEditID);
+        $('.modal #title').text(markerData[markerToEditID].title);
+        $('.modal #content').text(markerData[markerToEditID].content);
+        $('.modal #image').text(markerData[markerToEditID].image);
         map.closePopup();
-        $('.modal p').text(markerData[markerToEditID].content);
       });
 
       $("body").on("click", ".update-marker", function() {
-        var newContent = htmlWiper($(this).prev('textarea').val());
+        var newContent = htmlWiper($('.modal #content').val());
+        var newTitle = htmlWiper($('.modal #title').val());
+        var newImage = htmlWiper($('.modal #image').val());
         var updateMarkerID = $('.modal').data('marker_id');
-        $(this).prev('textarea').val("");
+        // $(this).prev('textarea').val("");
         markerData[updateMarkerID].content = newContent;
+        markerData[updateMarkerID].title = newTitle;
+        markerData[updateMarkerID].image = newImage;
         markers.eachLayer(function (layer) {
           if (layer._leaflet_id === $('.modal').data('marker_id')) {
-            layer._popup._content = '<p>' + newContent + '</p><br><button type="button" class="delete" id="' + layer._leaflet_id + '">Delete</button>' +
-            '<button type="button" class="edit" id="' + layer._leaflet_id + '">Edit</button>';
+            layer._popup._content = '<b><p>' + newTitle+ '</b><br>' + newContent + '</p><br><img src="' + newImage + '"><br><button type="button" class="delete" id="' + marker._leaflet_id + '">Delete</button>'
+            + '<button type="button" class="edit" id="' + marker._leaflet_id + '">Edit</button>';
           }
         });
         $('.modal').hide();

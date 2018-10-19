@@ -144,6 +144,8 @@ module.exports = (knex) => {
           for (let element of updates) {
             knex('markers')
               .insert({
+                title: element.title,
+                image_url: element.image,
                 content: element.content,
                 coords: element.coords,
                 map_id: req.params.id
