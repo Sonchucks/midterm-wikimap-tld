@@ -19,8 +19,8 @@ module.exports = (knex) => {
     .select("*")
     .from("maps")
     .then((maps) => {
-      console.log(maps);
-      res.render('map-list', {maps, id});
+      // console.log(maps);
+      res.render('map-list', {maps});
     });
   });
 
@@ -84,6 +84,7 @@ module.exports = (knex) => {
         res.status(404);
         res.send();
       } else {
+        let mapID = {id: req.params.id};
         let mapArray = mapDetails.map( (element) => {
           return {
             name: element.name,
@@ -92,7 +93,7 @@ module.exports = (knex) => {
             content: element.content
           };
         });
-        res.render('map-edit', {mapArray});
+        res.render('map-edit', {mapArray, mapID});
       }
     });
   });
@@ -119,8 +120,44 @@ module.exports = (knex) => {
 
 
   app.put('/:id', isAuthenticated, (req, res) => {
-    // Updates map redirect to :id
-    res.redirect("/:id")
+    if(!req.body.update) {
+      res.status(400);
+      res.send();
+    } else {
+      const updates = req.body.update;
+      console.log(updates);
+      res.status(201);
+      res.send();
+
+      knex('markers')
+        .where('map_id', req.params.id)
+        .del()
+        .then( () => {
+          for (let element of updates) {
+            console.log(element.content);
+            knex('markers')
+              .insert({
+                content: element.content,
+                coords: element.coords,
+                map_id: req.params.id
+              })
+              .then(function (row) {
+                console.log(row.rowCount);
+              });
+          }
+        });
+
+        // .then(function () {
+        //   var updates = req.body.update;
+        //   console.log(updates);
+        //   return knex('markers')
+        //   .insert(
+        //     {content: updates.content,
+        //     coords: updates.coords,
+        //     map_id: req.params.id}
+        //     );
+        // });
+    }
   });
 
 

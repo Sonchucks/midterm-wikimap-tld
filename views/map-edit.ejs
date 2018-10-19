@@ -28,7 +28,9 @@
       <span class="header"></span>
       <div class="map-list">
         <button type="button">Main Page</button>
+        <button type="button" class="debug">Debug</button>
       </div>
+
       <div class="modal">
         <div class="modal-content">
           <button class="close-modal">✖</button>
@@ -114,6 +116,10 @@
         $('.modal').hide();
       });
 
+      $(".debug").click(function () {
+        console.log(markerData);
+      });
+
       // Create a marker on map click
       function onMapClick(event) {
         var coords = [event.latlng.lat, event.latlng.lng];
@@ -150,7 +156,22 @@
       }
 
       map.on('click', onMapClick);
+
+      // -- Send data once updates are completed
+      $('document').ready(function() {
+        $(".finish").find('button').click(function () {
+          var markerSubmit = Object.keys(markerData).map( function (markerID) {
+            return markerData[markerID];
+          })
+          $.ajax('/maps/<%= mapID.id %>', {method: 'PUT', data: {update: markerSubmit}});
+          console.log(markerSubmit);
+        });
+      });
+
     </script>
+  </div>
+  <div class="finish">
+    <button type="button">Finish Editing</button>
   </div>
   </body>
 </html>
