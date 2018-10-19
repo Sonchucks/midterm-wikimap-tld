@@ -76,62 +76,8 @@
         map.fitBounds(newBounds, {padding: [50,50]});
         map.setMinZoom(map.getZoom());
 
-      // // Refocus the map based on the marker group bounds
-      // // This will mock when a new page is rendered to restrict the zoom if desired
-      // $(".rezoom").on('click', function () {
-      //   map.eachLayer(function(layer){
-      //     if (layer.options.title === 'marker') {
-      //     markers.addLayer(layer);
-      //     console.log("Leaflet id: " + layer._leaflet_id);
-      //     console.log("Latlng: " + layer.getLatLng());
-      //     console.log("Popup content: " + layer._popup._content);
-      //     }
-      //   });
-      //   var newBounds = markers.getBounds();
-      //   map.fitBounds(newBounds, {padding: [10,10]});
-      //   map.setMaxBounds(newBounds);
-      //   var currentZoom = map.getZoom();
-      //   map.setMinZoom(currentZoom - 1);
-      // });
-
-      // // Debug: print some details on the map object
-      // $(".showmap").on('click', function () {
-      //   console.log("Center: " + map.getCenter());
-      //   console.log("Zoom: " + map.getZoom());
-      //   console.log("Bounds: " + map.getBounds());
-      // });
-
-      // //Remove a marker
-      // $("body").on("click", ".delete", function() {
-      //   var markerToDeleteID = parseInt($(this).attr('id'), 10);
-      //   map.eachLayer(function (layer) {
-      //     if (layer.options.title === 'marker' && layer._leaflet_id === markerToDeleteID) {
-      //         map.removeLayer(layer);
-      //         markers.removeLayer(layer);
-      //     }
-      //   });
-      // });
-
-
-      // // Create a marker on map click
-      // function onMapClick(event) {
-      //   var coords = event.latlng;
-      //   var newMarker = L.marker(coords, {title: 'marker', riseOnHover: true, draggable: true}).addTo(map);
-      //   var bounds = new L.latLngBounds();
-      //   newMarker
-      //     .bindPopup("<p><b>Check out this new marker!</b><br>It's coords are: " + coords + "!</p>" +
-      //       '<p>My id: ' + newMarker._leaflet_id + '</p>' +
-      //       '<br><button type="button" class="delete" id="' + newMarker._leaflet_id + '">Delete</button>')
-      //     .openPopup();
-      //   newMarker.on('dragend', function(event){
-      //       var updateMarker = event.target;
-      //       var updateCoords = updateMarker.getLatLng();
-      //       updateMarker.setLatLng(updateCoords,{riseOnHover:true, draggable:true}).bindPopup("<p><b>Check out this new marker!</b><br>It's coords are: " + updateCoords + "!</p>").update().openPopup();
-      //     });
-      // }
-
-      // map.on('click', onMapClick);
     </script>
+
   </div>
   <div class="counter">
     <ul>
@@ -140,5 +86,11 @@
       <% } %>
     </ul>
   </div>
+
+  <form id='favorite-frm' method="post" action="/maps/<%=mapID%>/favorites">
+    <input type="submit" value="Favorite Button">
+  </form>
   </body>
 </html>
+
+//on click send user id map id to table favorited maps 

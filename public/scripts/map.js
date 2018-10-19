@@ -4,3 +4,6 @@ users.forEach(user, function(){
     knex('users').insert(user)
 
 });
+
+
+

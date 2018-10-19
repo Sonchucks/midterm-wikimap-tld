@@ -1,6 +1,6 @@
 
 exports.up = function(knex, Promise) {
-    return knex.schema.createTable('favorited_maps', function(table) {
+    return knex.schema.createTable('favorites', function(table) {
         table.increments();
         table.integer("user_id");
         table.integer('map_id')
@@ -13,5 +13,5 @@ exports.up = function(knex, Promise) {
 };
 
 exports.down = function(knex, Promise) {
-  return knex.schema.dropTable("favorited_maps");
+  return knex.schema.dropTable("favorites");
 };

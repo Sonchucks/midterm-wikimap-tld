@@ -62,7 +62,7 @@ module.exports = (knex) => {
             content: element.content
           };
         });
-        res.render('map-view', {mapArray});
+        res.render('map-view', {mapArray, mapID:req.params.id});
       }
     });
   });
@@ -104,6 +104,26 @@ module.exports = (knex) => {
   app.put('/:id', isAuthenticated, (req, res) => {
     // Updates map redirect to :id
     res.redirect("/:id")
+  });
+
+
+  app.post('/:id/favorites', isAuthenticated, (req, res) => {
+    const userId = req.session.userID;
+    const mapId =  req.params.id;
+    
+    console.log("These are my vars", userId, mapId);
+
+
+    knex.insert({
+      user_id: userId,
+      map_id: mapId
+    })
+    .returning("id")
+    .into("favorites")
+    .then(function (id) {
+      res.redirect(`/maps/${mapId}`);
+    }); 
+
   });
 
 
