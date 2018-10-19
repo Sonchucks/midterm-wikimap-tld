@@ -9,10 +9,24 @@ body {
     div {
       ul {
         li {
-          margin: 2em 0;
+          margin: 1em 0;
+          width: 300px;
         }
       }
     }
   }
+}
 
+@media (min-width: 768px) {
+  body {
+    main {
+      div {
+        ul {
+          li {
+            width: 600px;
+          }
+        }
+      }
+    }
+  }
 }

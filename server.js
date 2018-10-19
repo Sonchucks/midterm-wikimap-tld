@@ -62,6 +62,9 @@ app.get('/logout', (req, res) => {
 
 // login page
 app.get("/login" , (req, res) => {
+  if (req.session.userID) {
+    res.redirect('/maps')
+  }
   res.render('login');
 });
 

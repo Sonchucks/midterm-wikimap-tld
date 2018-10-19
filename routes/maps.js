@@ -45,7 +45,6 @@ module.exports = (knex) => {
   // -- Show a map in detail
   app.get("/:id", (req, res) => {
     const id = req.session.userID;
-    const mapID = req.params.id
 
     let mapDetails = {};
     knex("markers")
@@ -73,29 +72,38 @@ module.exports = (knex) => {
   });
 
   app.get("/edit/:id", isAuthenticated, (req, res) => {
-    let mapDetails = {};
-    knex("markers")
-    .join('maps', 'markers.map_id', '=', 'maps.id')
-    .join('users', 'maps.creator_id', '=', 'users.id')
-    .select("*")
-    .where("maps.id", req.params.id)
-    .then((mapDetails) => {
-      if (mapDetails.length === 0) {
-        res.status(404);
-        res.send();
-      } else {
-        let mapArray = mapDetails.map( (element) => {
-          return {
-            name: element.name,
-            description: element.description,
-            coords: element.coords,
-            content: element.content
-          };
-        });
-        res.render('map-edit', {mapArray});
-      }
+      let mapDetails = {};
+      let mapData= {};
+
+      knex("maps")
+      .distinct('maps.name', 'maps.description')
+      .select()
+      .where('maps.id', req.params.id)
+      .then( (results) => {
+        mapData = {
+          map_name: results[0].name,
+          map_description: results[0].description
+        };
+      }).then( () => {
+        knex("markers")
+        .join('maps', 'markers.map_id', '=', 'maps.id')
+        .join('users', 'maps.creator_id', '=', 'users.id')
+        .select("*")
+        .where("maps.id", req.params.id)
+        .then((mapDetails) => {
+            let mapID = {id: req.params.id};
+            let mapArray = mapDetails.map( (element) => {
+              return {
+                name: element.name,
+                description: element.description,
+                coords: element.coords,
+                content: element.content
+              };
+            });
+            res.render('map-edit', {mapArray, mapID, mapData});
+          });
+      });
     });
-  });
 
 
 
