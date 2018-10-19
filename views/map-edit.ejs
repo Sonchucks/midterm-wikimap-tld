@@ -44,7 +44,7 @@
     <script>
 
       var map = L.map('mapid').setView([45.500538, -73.644471], 13);
-      var markers = new L.featureGroup();
+      var markers = new L.featureGroup().addTo(map);
       var markerData = {};
 
       L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}',
@@ -60,7 +60,9 @@
       for(var loop = 0; loop < mapInfo.length; loop++) {
         var coordinates = mapInfo[loop].coords;
         var content = mapInfo[loop].content;
-        var marker = L.marker(coordinates, {title: 'marker', riseOnHover: true, draggable: true}).addTo(map);
+        var marker = L.marker(coordinates, {title: 'marker', riseOnHover: true, draggable: true})
+          .addTo(map)
+          .on('dragend', updateCoords);
         marker
           .bindPopup('<p>' + content + '</p><br><button type="button" class="delete" id="' + marker._leaflet_id + '">Delete</button>'
             + '<button type="button" class="edit" id="' + marker._leaflet_id + '">Edit</button>');
@@ -98,13 +100,10 @@
       $("body").on("click", ".update-marker", function() {
         var newContent = $(this).prev('textarea').val();
         var updateMarkerID = $('.modal').data('marker_id');
-        console.log(newContent + "is the new content");
-        console.log(updateMarkerID + " is the marker to edit!");
         $(this).prev('textarea').val("");
         markerData[updateMarkerID].content = newContent;
         markers.eachLayer(function (layer) {
           if (layer._leaflet_id === $('.modal').data('marker_id')) {
-            console.log(".update has matched!");
             layer._popup._content = '<p>' + newContent + '</p><br><button type="button" class="delete" id="' + layer._leaflet_id + '">Delete</button>' +
             '<button type="button" class="edit" id="' + layer._leaflet_id + '">Edit</button>';
           }
@@ -120,7 +119,9 @@
       // Create a marker on map click
       function onMapClick(event) {
         var coords = [event.latlng.lat, event.latlng.lng];
-        var newMarker = L.marker(coords, {title: 'marker', riseOnHover: true, draggable: true}).addTo(map);
+        var newMarker = L.marker(coords, {title: 'marker', riseOnHover: true, draggable: true})
+          .addTo(map)
+          .on('dragend', updateCoords);
         var bounds = new L.latLngBounds();
         newMarker
           .bindPopup('<p>This is a new marker!</p><br><button type="button" class="delete" id="' + newMarker._leaflet_id + '">Delete</button>' +
@@ -132,7 +133,6 @@
             content: "This is a new marker!",
             coords: coords
           };
-        console.log(markerData);
       }
 
       function htmlWiper(content) {
@@ -143,6 +143,12 @@
           .replace(/Edit/g, "")
           .replace(/Delete/g, "");
         return cleanedContent;
+      }
+
+      function updateCoords (event) {
+        var markerDragID = event.target._leaflet_id;
+        var dragCoords = [event.target._latlng.lat, event.target._latlng.lng];
+        markerData[markerDragID].coords = dragCoords;
       }
 
       map.on('click', onMapClick);
