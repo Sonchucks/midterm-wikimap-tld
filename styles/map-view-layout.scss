@@ -1,43 +1,35 @@
+@import 'variables';
+
 body {
-  background-color: #EEE;
-  display: flex;
-  flex-direction: column;
-
-  #nav-bar {
-    display:flex;
-    flex-direction: row;
-    justify-content: center;
-
-    h1 {
-      order: 1;
-      font-size: 2em;
-    }
-
-    .map-list {
-      order: 0;
-      align-self: center;
-      margin-right: 2em;
-    }
-
-    .edit {
-      order: 2;
-      align-self: center;
-      margin-left: 2em;
-    }
-
+  header {
+    font-family: $headerFontStack;
+    text-align: center;
   }
 
-  .map {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
+
+  div {
+    margin: 2em 0;
+    ul {
+      li {
+        width: 600px;
+        .title {
+          border-bottom: solid 1px;
+        }
+      }
+    }
   }
 
   #mapid {
-    margin: auto;
+    margin: 2em auto;
     height: 600px;
     width: 800px;
     z-index: 1;
   }
 
+  #favorite-frm {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
 }
+

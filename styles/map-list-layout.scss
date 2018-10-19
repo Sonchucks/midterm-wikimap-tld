@@ -11,6 +11,14 @@ body {
         li {
           margin: 1em 0;
           width: 300px;
+
+          .title {
+            color: black;
+            border-bottom: solid 1px black;
+          }
+          .description {
+            color: black
+          }
         }
       }
     }

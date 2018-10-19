@@ -41,7 +41,7 @@
             <a class="nav-link active" href="/maps">Back to List</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link active" href="/maps">Back to View</a>
+            <a class="nav-link active" href="/maps/<%= mapID.id %>">Back to View</a>
           </li>
           <li class="nav-item">
             <a class="nav-link active" href="/logout">Logout</a>
@@ -53,7 +53,10 @@
 
 
     <nav id="nav-bar">
+      <h1> <%= mapData.map_name %> </h1>
+      <h6> <%= mapData.map_description %> </h6>
       <span class="header"></span>
+
       <div class="modal">
         <div class="modal-content">
           <button class="close-modal">✖</button>
@@ -69,7 +72,7 @@
     <div id="mapid">
     <script>
 
-      var map = L.map('mapid').setView([45.500538, -73.644471], 13);
+      var map = L.map('mapid').setView([0, 0], 2);
       var markers = new L.featureGroup().addTo(map);
       var markerData = {};
 
@@ -98,8 +101,11 @@
             coords: coordinates
           };
       }
-      var newBounds = markers.getBounds();
-      map.fitBounds(newBounds, {padding: [50,50]});
+
+      if (mapInfo.length !== 0) {
+        var newBounds = markers.getBounds();
+        map.fitBounds(newBounds, {padding: [50,50]});
+      }
 
       //Remove a marker
       $("body").on("click", ".delete", function() {
@@ -153,7 +159,7 @@
         markers.addLayer(newMarker);
         markerData[newMarker._leaflet_id]=
           {
-            content: "This is a new marker!",
+            content: "Why don't you add some new content to this marker!",
             coords: coords
           };
       }
@@ -175,7 +181,26 @@
       }
 
       map.on('click', onMapClick);
+
+      // -- Send data once updates are completed
+      $('document').ready(function() {
+        $(".finish").find('button').click(function () {
+          if(Object.keys(markerData).length === 0) {
+            alert("Oops, your map needs to have at least one marker!");
+          } else {
+            var markerSubmit = Object.keys(markerData).map( function (markerID) {
+              return markerData[markerID];
+            })
+            $.ajax('/maps/<%= mapID.id %>', {method: 'PUT', data: {update: markerSubmit}});
+            console.log(markerSubmit);
+          }
+        });
+      });
+
     </script>
+  </div>
+  <div class="finish">
+    <button type="button">Finish Editing</button>
   </div>
   </body>
 </html>

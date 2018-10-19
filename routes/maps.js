@@ -12,6 +12,7 @@ app.use(cookieSession({
 
 module.exports = (knex) => {
 
+  // List all created maps
   app.get("/", (req, res) => {
     const id = req.session.userID;
 
@@ -19,94 +20,94 @@ module.exports = (knex) => {
     .select("*")
     .from("maps")
     .then((maps) => {
-      console.log(maps);
       res.render('map-list', {maps, id});
     });
   });
 
+  // Redirect to root
   app.get('/view', isAuthenticated, (req, res) => {
       res.redirect('/maps');
   });
 
+  // Gets new map form if user is authenticated
   app.get('/new', isAuthenticated, (req, res) => {
     res.render("map-new");
-  });
-
-  app.get('/api', (req, res) => {
-    knex("markers")
-    .join('maps', 'markers.map_id', '=', 'maps.id')
-    .join('users', 'maps.creator_id', '=', 'users.id')
-    .select("*")
-    .then((markers) => {
-      res.json(markers);
-    });
   });
 
   // -- Show a map in detail
   app.get("/:id", (req, res) => {
     const id = req.session.userID;
-
+    let mapData = {};
     let mapDetails = {};
-    knex("markers")
-    .join('maps', 'markers.map_id', '=', 'maps.id')
-    .join('users', 'maps.creator_id', '=', 'users.id')
-    .select("*")
-    .where("maps.id", req.params.id)
-    .then((mapDetails) => {
-      if (mapDetails.length === 0) {
-        res.status(404);
-        res.send();
-      } else {
-        let mapID = {id: req.params.id};
-        let mapArray = mapDetails.map( (element) => {
-          return {
-            name: element.name,
-            description: element.description,
-            coords: element.coords,
-            content: element.content
-          };
-        });
-        res.render('map-view', {mapArray, id, mapID});
-      }
+
+    // First fetch the name data for the correct map
+    // then fetch the marker data for that map
+    knex("maps")
+    .distinct('maps.name', 'maps.description')
+    .select()
+    .where('maps.id', req.params.id)
+    .then( (results) => {
+      mapData = {
+        map_name: results[0].name,
+        map_description: results[0].description
+      };
+    }).then(() => {
+      knex("markers")
+      .join('maps', 'markers.map_id', '=', 'maps.id')
+      .join('users', 'maps.creator_id', '=', 'users.id')
+      .select("markers.content", "markers.coords")
+      .where("maps.id", req.params.id)
+      .then((mapDetails) => {
+          let mapID = {id: req.params.id};
+          let mapArray = mapDetails.map( (element) => {
+            return {
+              coords: element.coords,
+              content: element.content
+            };
+          });
+        res.render('map-view', {mapArray, id, mapID, mapData});
+      });
+
     });
   });
 
+  // -- Allows a user to access the edit form if they are authenticated
   app.get("/edit/:id", isAuthenticated, (req, res) => {
-      let mapDetails = {};
-      let mapData= {};
+    let mapDetails = {};
+    let mapData= {};
 
-      knex("maps")
-      .distinct('maps.name', 'maps.description')
-      .select()
-      .where('maps.id', req.params.id)
-      .then( (results) => {
-        mapData = {
-          map_name: results[0].name,
-          map_description: results[0].description
-        };
-      }).then( () => {
-        knex("markers")
-        .join('maps', 'markers.map_id', '=', 'maps.id')
-        .join('users', 'maps.creator_id', '=', 'users.id')
-        .select("*")
-        .where("maps.id", req.params.id)
-        .then((mapDetails) => {
-            let mapID = {id: req.params.id};
-            let mapArray = mapDetails.map( (element) => {
-              return {
-                name: element.name,
-                description: element.description,
-                coords: element.coords,
-                content: element.content
-              };
-            });
-            res.render('map-edit', {mapArray, mapID, mapData});
+    knex("maps")
+    .distinct('maps.name', 'maps.description')
+    .select()
+    .where('maps.id', req.params.id)
+    .then( (results) => {
+      mapData = {
+        map_name: results[0].name,
+        map_description: results[0].description
+      };
+    }).then( () => {
+      knex("markers")
+      .join('maps', 'markers.map_id', '=', 'maps.id')
+      .join('users', 'maps.creator_id', '=', 'users.id')
+      .select("*")
+      .where("maps.id", req.params.id)
+      .then((mapDetails) => {
+          let mapID = {id: req.params.id};
+          let mapArray = mapDetails.map( (element) => {
+            return {
+              name: element.name,
+              description: element.description,
+              coords: element.coords,
+              content: element.content
+            };
           });
-      });
+          res.render('map-edit', {mapArray, mapID, mapData});
+        });
     });
+  })
 
 
-
+  // -- Creates a new map
   app.post('/', isAuthenticated, (req, res) => {
     const newTitle = req.body.title;
     const newDesc = req.body.description;
@@ -121,14 +122,62 @@ module.exports = (knex) => {
       .into('maps')
       .then(function (id) {
         const mapID = id[0];
-        res.redirect(`/maps`);
+        res.redirect(`/maps/edit/${mapID}`);
       });
 });
 
-
+  // -- Add new markers to a map
   app.put('/:id', isAuthenticated, (req, res) => {
-    // Updates map redirect to :id
-    res.redirect("/:id")
+    if(!req.body.update) {
+      res.status(400);
+      res.send();
+    } else {
+      const updates = req.body.update;
+      res.status(201);
+      res.send();
+      knex('markers')
+        .where('map_id', req.params.id)
+        .del()
+        .then( () => {
+          for (let element of updates) {
+            knex('markers')
+              .insert({
+                content: element.content,
+                coords: element.coords,
+                map_id: req.params.id
+              })
+              .then(function () {
+                console.log('Update complete');
+              });
+          }
+        });
+    }
+  });
+
+
+  app.post('/:id/favorites', isAuthenticated, (req, res) => {
+
+    const userId = req.session.userID;
+    const mapId =  req.params.id;
+    console.log(req.params);
+
+    console.log('User ID');
+    console.log(userId);
+    console.log('mapId');
+    console.log(mapId);
+
+
+    knex.insert({
+      user_id: userId,
+      map_id: mapId
+    })
+    .returning("id")
+    .into("favorites")
+    .then(function (id) {
+      console.log('added to favorites')
+      res.status(201).send({msg: "This is working"});
+    });
+
   });
 
 
@@ -142,5 +191,6 @@ function isAuthenticated (req, res, next) {
   }
 
   return app;
-}
+};
+
 
