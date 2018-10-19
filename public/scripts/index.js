@@ -1,8 +1,8 @@
 'use strict';
 
 $( document ).ready(function() {
-  $('.login').click(function(){
-    window.location = "/login";
+  $('.login-button').click(function(){
+    $('.login-form').slideToggle('slow', function () {});
   });
 
   $('.view-maps').click(function(){

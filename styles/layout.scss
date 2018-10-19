@@ -19,23 +19,9 @@ body {
     display: flex;
     flex-direction: column;
 
-      .login {
-        margin-bottom: 1em;
-        align-self: center;
-
-        i {
-          visibility: hidden;
-        }
-      }
-
-      .login:hover {
-        i {
-          visibility: visible;
-        }
-      }
-
       .view-maps {
         align-self: center;
+        margin-bottom: 1em;
 
         i {
           visibility: hidden;
@@ -43,9 +29,33 @@ body {
       }
 
       .view-maps:hover {
+        cursor: pointer;
+
         i {
           visibility: visible;
         }
       }
+
+      .login-button {
+        align-self: center;
+
+        i {
+          visibility: hidden;
+        }
+      }
+
+      .login-button:hover {
+        cursor: pointer;
+
+        i {
+          visibility: visible;
+        }
+      }
+
+      .login-form {
+        display: none;
+      }
+
+
   }
 }
