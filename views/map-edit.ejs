@@ -62,7 +62,7 @@
         var content = mapInfo[loop].content;
         var marker = L.marker(coordinates, {title: 'marker', riseOnHover: true, draggable: true}).addTo(map);
         marker
-          .bindPopup(content+ '<br><button type="button" class="delete" id="' + marker._leaflet_id + '">Delete</button>'
+          .bindPopup('<p>' + content + '</p><br><button type="button" class="delete" id="' + marker._leaflet_id + '">Delete</button>'
             + '<button type="button" class="edit" id="' + marker._leaflet_id + '">Edit</button>');
         markers.addLayer(marker);
         markerData[marker._leaflet_id] = {
@@ -97,17 +97,20 @@
 
       $("body").on("click", ".update-marker", function() {
         var newContent = $(this).prev('textarea').val();
+        var updateMarkerID = $('.modal').data('marker_id');
         console.log(newContent + "is the new content");
-        console.log($('.modal').data('marker_id') + " is the marker to edit!");
+        console.log(updateMarkerID + " is the marker to edit!");
         $(this).prev('textarea').val("");
+        markerData[updateMarkerID].content = newContent;
         markers.eachLayer(function (layer) {
           if (layer._leaflet_id === $('.modal').data('marker_id')) {
             console.log(".update has matched!");
-            layer._popup._content = newContent + '<br><button type="button" class="delete" id="' + layer._leaflet_id + '">Delete</button>' +
+            layer._popup._content = '<p>' + newContent + '</p><br><button type="button" class="delete" id="' + layer._leaflet_id + '">Delete</button>' +
             '<button type="button" class="edit" id="' + layer._leaflet_id + '">Edit</button>';
           }
         });
         $('.modal').hide();
+        console.log(markerData);
       });
 
       $("body").on("click", ".close-modal", function() {
@@ -120,7 +123,7 @@
         var newMarker = L.marker(coords, {title: 'marker', riseOnHover: true, draggable: true}).addTo(map);
         var bounds = new L.latLngBounds();
         newMarker
-          .bindPopup('This is a new marker!<br><button type="button" class="delete" id="' + newMarker._leaflet_id + '">Delete</button>' +
+          .bindPopup('<p>This is a new marker!</p><br><button type="button" class="delete" id="' + newMarker._leaflet_id + '">Delete</button>' +
             '<button type="button" class="edit" id="' + newMarker._leaflet_id + '">Edit</button>')
           .openPopup();
         markers.addLayer(newMarker);
