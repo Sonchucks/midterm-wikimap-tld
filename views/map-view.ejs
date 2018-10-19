@@ -24,7 +24,8 @@
 
   <body>
     <nav id="nav-bar">
-      <h1>Welcome to Map View</h1>
+      <h1><%= mapData.map_name%></h1>
+      <h6><%= mapData.map_description%></h6>
       <div class="map-list">
         <button type="button">Back to List</button>
       </div>
@@ -55,6 +56,7 @@
       }).addTo(map);
 
       var mapInfo = <%- JSON.stringify(mapArray)%>;
+      console.log(mapInfo);
 
       for(var loop = 0; loop < mapInfo.length; loop++) {
         var coordinates = mapInfo[loop].coords;
