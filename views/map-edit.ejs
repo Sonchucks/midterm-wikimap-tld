@@ -62,16 +62,20 @@
       var mapInfo = <%- JSON.stringify(mapArray)%>;
 
       for(var loop = 0; loop < mapInfo.length; loop++) {
+        var title = mapInfo[loop].title;
+        var image = mapInfo[loop].image_url;
         var coordinates = mapInfo[loop].coords;
         var content = mapInfo[loop].content;
         var marker = L.marker(coordinates, {title: 'marker', riseOnHover: true, draggable: true})
           .addTo(map)
           .on('dragend', updateCoords);
         marker
-          .bindPopup('<p>' + content + '</p><br><button type="button" class="delete" id="' + marker._leaflet_id + '">Delete</button>'
+          .bindPopup('<b><p>' + title+ '</b>' + content + '</p><br><img src="' + image + '"><br><button type="button" class="delete" id="' + marker._leaflet_id + '">Delete</button>'
             + '<button type="button" class="edit" id="' + marker._leaflet_id + '">Edit</button>');
         markers.addLayer(marker);
         markerData[marker._leaflet_id] = {
+            title: title,
+            image: image,
             content: content,
             coords: coordinates
           };
@@ -128,13 +132,15 @@
           .on('dragend', updateCoords);
         var bounds = new L.latLngBounds();
         newMarker
-          .bindPopup('<p>This is a new marker!</p><br><button type="button" class="delete" id="' + newMarker._leaflet_id + '">Delete</button>' +
+          .bindPopup('<p><b>New Marker</b><br>Tell us about this place!</p><br><button type="button" class="delete" id="' + newMarker._leaflet_id + '">Delete</button>' +
             '<button type="button" class="edit" id="' + newMarker._leaflet_id + '">Edit</button>')
           .openPopup();
         markers.addLayer(newMarker);
         markerData[newMarker._leaflet_id]=
           {
-            content: "Why don't you add some new content to this marker!",
+            title: "New Marker",
+            image: "",
+            content: "Tell us about this place!",
             coords: coords
           };
       }
