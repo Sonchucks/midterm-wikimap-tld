@@ -179,8 +179,8 @@
             var markerSubmit = Object.keys(markerData).map( function (markerID) {
               return markerData[markerID];
             })
-            $.ajax('/maps/<%= mapID.id %>', {method: 'PUT', data: {update: markerSubmit}});
             console.log(markerSubmit);
+            $.ajax('/maps/<%= mapID.id %>', {method: 'PUT', data: {update: markerSubmit}});
           }
         });
       });

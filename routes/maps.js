@@ -135,6 +135,7 @@ module.exports = (knex) => {
       res.send();
     } else {
       const updates = req.body.update;
+      console.log(updates);
       res.status(201);
       res.send();
       knex('markers')
