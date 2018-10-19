@@ -156,10 +156,15 @@ module.exports = (knex) => {
 
 
   app.post('/:id/favorites', isAuthenticated, (req, res) => {
+
     const userId = req.session.userID;
     const mapId =  req.params.id;
-    
-    console.log("These are my vars", userId, mapId);
+    console.log(req.params);
+
+    console.log('User ID');
+    console.log(userId);
+    console.log('mapId');
+    console.log(mapId);
 
 
     knex.insert({
@@ -171,7 +176,7 @@ module.exports = (knex) => {
     .then(function (id) {
       console.log('added to favorites')
       res.status(201).send({msg: "This is working"});
-    }); 
+    });
 
   });
 
