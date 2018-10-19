@@ -100,10 +100,22 @@ module.exports = (knex) => {
 
 
   app.post('/', isAuthenticated, (req, res) => {
-
-    //add a new map, redirect to
-
-  });
+    const newTitle = req.body.title;
+    const newDesc = req.body.description;
+    const userID = req.session.userID;
+    knex
+      .insert({
+        name: newTitle,
+        description: newDesc,
+        creator_id: userID
+      })
+      .returning('id')
+      .into('maps')
+      .then(function (id) {
+        const mapID = id[0];
+        res.redirect(`/maps`);
+      });
+});
 
 
   app.put('/:id', isAuthenticated, (req, res) => {
