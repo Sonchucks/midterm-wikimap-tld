@@ -55,12 +55,14 @@ module.exports = (knex) => {
       knex("markers")
       .join('maps', 'markers.map_id', '=', 'maps.id')
       .join('users', 'maps.creator_id', '=', 'users.id')
-      .select("markers.content", "markers.coords")
+      .select("markers.content", "markers.coords", "markers.title", "markers.image_url")
       .where("maps.id", req.params.id)
       .then((mapDetails) => {
           let mapID = {id: req.params.id};
           let mapArray = mapDetails.map( (element) => {
             return {
+              title: element.title,
+              image_url: element.image_url,
               coords: element.coords,
               content: element.content
             };
@@ -95,8 +97,8 @@ module.exports = (knex) => {
           let mapID = {id: req.params.id};
           let mapArray = mapDetails.map( (element) => {
             return {
-              name: element.name,
-              description: element.description,
+              title: element.title,
+              image_url: element.image_url,
               coords: element.coords,
               content: element.content
             };

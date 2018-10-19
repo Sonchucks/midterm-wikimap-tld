@@ -61,11 +61,13 @@
       console.log(mapInfo);
 
       for(var loop = 0; loop < mapInfo.length; loop++) {
+        var title = mapInfo[loop].title;
+        var image = mapInfo[loop].image_url;
         var coordinates = mapInfo[loop].coords;
         var content = mapInfo[loop].content;
         var marker = L.marker(coordinates, {title: 'marker', riseOnHover: true}).addTo(map);
         marker
-          .bindPopup("<p>" + content + "</p>");
+          .bindPopup("<p><b>" + title+ "</b><br>" + content + '</p><br><image src="' + image + '">');
         markers.addLayer(marker);
       }
 
