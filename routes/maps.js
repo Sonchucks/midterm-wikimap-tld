@@ -12,6 +12,7 @@ app.use(cookieSession({
 
 module.exports = (knex) => {
 
+  // List all created maps
   app.get("/", (req, res) => {
     const id = req.session.userID;
 
@@ -23,22 +24,14 @@ module.exports = (knex) => {
     });
   });
 
+  // Redirect to root
   app.get('/view', isAuthenticated, (req, res) => {
       res.redirect('/maps');
   });
 
+  // Gets new map form if user is authenticated
   app.get('/new', isAuthenticated, (req, res) => {
     res.render("map-new");
-  });
-
-  app.get('/api', (req, res) => {
-    knex("markers")
-    .join('maps', 'markers.map_id', '=', 'maps.id')
-    .join('users', 'maps.creator_id', '=', 'users.id')
-    .select("*")
-    .then((markers) => {
-      res.json(markers);
-    });
   });
 
   // -- Show a map in detail
@@ -65,7 +58,7 @@ module.exports = (knex) => {
       });
   });
 
-  // -- Edit a saved map
+  // -- Allows a user to access the edit form if they are authenticated
   app.get("/edit/:id", isAuthenticated, (req, res) => {
     let mapDetails = {};
     knex("markers")
@@ -87,6 +80,8 @@ module.exports = (knex) => {
       });
   });
 
+
+  // -- Creates a new map
   app.post('/', isAuthenticated, (req, res) => {
     const newTitle = req.body.title;
     const newDesc = req.body.description;
@@ -105,31 +100,28 @@ module.exports = (knex) => {
       });
 });
 
-
+  // -- Add new markers to a map
   app.put('/:id', isAuthenticated, (req, res) => {
     if(!req.body.update) {
       res.status(400);
       res.send();
     } else {
       const updates = req.body.update;
-      console.log(updates);
       res.status(201);
       res.send();
-
       knex('markers')
         .where('map_id', req.params.id)
         .del()
         .then( () => {
           for (let element of updates) {
-            console.log(element.content);
             knex('markers')
               .insert({
                 content: element.content,
                 coords: element.coords,
                 map_id: req.params.id
               })
-              .then(function (row) {
-                console.log(row.rowCount);
+              .then(function () {
+                console.log('Update complete');
               });
           }
         });
@@ -145,7 +137,6 @@ function isAuthenticated (req, res, next) {
       res.redirect('/');
     }
   }
-
   return app;
-}
+};
 
