@@ -55,15 +55,19 @@ app.get("/", (req, res) => {
   res.render("index");
 });
 
-app.post('/logout', (req, res) => {
+app.get('/logout', (req, res) => {
   req.session = null;
   res.redirect('/');
 })
 
 // login page
 app.get("/login" , (req, res) => {
-  res.redirect('/');
+  res.render('login');
 });
+
+app.get('/test', (req, res) => {
+  res.render('test');
+})
 
 app.get('/user/:id', (req, res) => {
   //display user profile
