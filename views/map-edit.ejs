@@ -110,18 +110,21 @@
       });
 
       $("body").on("click", ".update-marker", function() {
-        var newContent = htmlWiper($('.modal #content').val());
-        var newTitle = htmlWiper($('.modal #title').val());
-        var newImage = htmlWiper($('.modal #image').val());
+        var newContent = htmlWiper($('.modal #content').val(), "content");
+        var newTitle = htmlWiper($('.modal #title').val(), "title");
+        var newImage = htmlWiper($('.modal #image').val(), "image");
         var updateMarkerID = $('.modal').data('marker_id');
-        // $(this).prev('textarea').val("");
         markerData[updateMarkerID].content = newContent;
         markerData[updateMarkerID].title = newTitle;
         markerData[updateMarkerID].image = newImage;
+        console.log("markers object:");
+        console.log(markers);
         markers.eachLayer(function (layer) {
+          console.log("current layer:");
+          console.log(layer);
           if (layer._leaflet_id === $('.modal').data('marker_id')) {
-            layer._popup._content = '<b><p>' + newTitle+ '</b><br>' + newContent + '</p><br><img src="' + newImage + '"><br><button type="button" class="delete" id="' + marker._leaflet_id + '">Delete</button>'
-            + '<button type="button" class="edit" id="' + marker._leaflet_id + '">Edit</button>';
+            layer._popup._content = '<b><p>' + newTitle+ '</b><br>' + newContent + '</p><br><img src="' + newImage + '"><br><button type="button" class="delete" id="' + layer._leaflet_id + '">Delete</button>'
+            + '<button type="button" class="edit" id="' + layer._leaflet_id + '">Edit</button>';
           }
         });
         $('.modal').hide();
@@ -152,9 +155,15 @@
           };
       }
 
-      function htmlWiper(content) {
+      function htmlWiper(content, type) {
         if (!content) {
-          return "Add a description for this marker!";
+          if ( type === "content") {
+            return "Tell us about this place!";
+          } else if ( type === "title") {
+            return "New Marker";
+          } else if ( type === "image") {
+            return;
+          }
         }
         var cleanedContent = content.replace(/\<(.*?)\>/g, "")
           .replace(/Edit/g, "")
