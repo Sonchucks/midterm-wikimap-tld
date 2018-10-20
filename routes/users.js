@@ -45,21 +45,49 @@ module.exports = (knex) => {
       });
   });
 
-  router.get('/:id', (req, res) => {
-    if (req.session.userID) {
-      knex('users')
-      .join("favorites", 'users.id', '=', 'favorites.user_id')
-      .join("maps", 'maps.id', '=', 'favorites.map_id')
-        .where({
-          user_id: req.session.userID,
-        })
-        .then((results) => {
-        res.render('user-view',{ results: results});
-        });
-    } else {
-      res.redirect('/');
-    }
-  });
+router.get('/:id', (req, res) => {
+  if (req.session.userID) {
+    knex('users')
+    .join("favorites", 'users.id', '=', 'favorites.user_id')
+    .join("maps", 'maps.id', '=', 'favorites.map_id')
+      .where({
+        user_id: req.session.userID,
+      })
+      .then((favorites) => {
+        knex('users')
+          .join("contributions", 'users.id', '=', 'contributions.user_id')
+          .join("maps", 'maps.id', "=", "contributions.map_id")
+          .where({
+            user_id: req.session.userID,
+          })
+          .then((contributions) => {
+
+            console.log(favorites);
+            console.log(contributions);
+            res.render('user-view',{
+              favorites: favorites,
+              contributions: contributions,
+            });
+          })
+
+      });
+
+
+
+
+  } else {
+    res.redirect('/');
+}
+
+
+
+
+
+});
+
+
+
+>>>>>>> layout
   return router;
 };
 
