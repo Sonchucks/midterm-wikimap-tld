@@ -51,8 +51,8 @@ module.exports = (knex) => {
 router.get('/:id', (req, res) => {
   if (req.session.userID) {
     knex('users')
-    .fullOuterJoin("favorites", 'users.id', '=', 'favorites.user_id')
-    .fullOuterJoin("maps", 'maps.id', '=', 'favorites.map_id')
+    .join("favorites", 'users.id', '=', 'favorites.user_id')
+    .join("maps", 'maps.id', '=', 'favorites.map_id')
       .where({
         user_id: req.session.userID,
       })
