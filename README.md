@@ -1,4 +1,7 @@
-# Node Skeleton
+# WikiMap
+A Lighthouse Labs midterm project by [Louis Riehl](https://github.com/louisriehl), [David Son](https://github.com/Sonchucks), and [Terence Hawes](https://github.com/Terence1991).
+
+Create and collaboratively edit maps to share your favorite spots around the world! Title and add content to your markers, even adding an image!
 
 ## Project Setup
 
@@ -25,5 +28,13 @@
 
 ## Dependencies
 
-- Node 5.10.x or above
-- NPM 3.8.x or above
+- bodyparser
+- cookiesession
+- dotenv
+- ejs
+- express
+- knex
+- knex-logger
+- morgan
+- node-sass-middleware
+- pg
