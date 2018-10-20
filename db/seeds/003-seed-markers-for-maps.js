@@ -1,13 +1,11 @@
 
 exports.seed = function(knex, Promise) {
-  // Deletes ALL existing entries
   return knex('markers')
     .then(function () {
       return knex.raw('ALTER SEQUENCE markers_id_seq RESTART WITH 1');
     })
     .then(function () {
       return Promise.all([
-        // Inserts seed entries
         knex('markers').insert({title: "Montreal", image_url: "https://media-cdn.tripadvisor.com/media/photo-s/0e/1f/2d/2b/montreal-attraction-pass.jpg", content: 'See Mount Royal in the Fall!', coords: [45.487597, -73.554966], map_id: 52}),
         knex('markers').insert({title: "London", image_url: "https://images.pexels.com/photos/460672/pexels-photo-460672.jpeg?auto=compress&cs=tinysrgb&h=350", content: 'Take a selfie with Big Ben!', coords: [51.507346, -0.127759], map_id: 52}),
         knex('markers').insert({title: "Singapore", image_url: "https://dynaimage.cdn.cnn.com/cnn/q_auto,w_900,c_fill,g_auto,h_506,ar_16:9/http%3A%2F%2Fcdn.cnn.com%2Fcnnnext%2Fdam%2Fassets%2F150806121501-sg-50---lead-image.jpg", content: 'Malls and dumplings that will make you never want to leave!', coords: [1.347168, 103.867318], map_id: 52}),

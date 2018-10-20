@@ -8,7 +8,9 @@ app.use(cookieSession({
   name: 'session',
   keys: ['userID']
 }));
-// / = maps
+
+
+// Root = /maps
 
 module.exports = (knex) => {
 
@@ -69,7 +71,6 @@ module.exports = (knex) => {
           });
         res.render('map-view', {mapArray, id, mapID, mapData});
       });
-
     });
   });
 
@@ -106,8 +107,7 @@ module.exports = (knex) => {
           res.render('map-edit', {mapArray, mapID, mapData});
         });
     });
-  })
-
+  });
 
   // -- Creates a new map
   app.post('/', isAuthenticated, (req, res) => {
@@ -126,7 +126,7 @@ module.exports = (knex) => {
         const mapID = id[0];
         res.redirect(`/maps/edit/${mapID}`);
       });
-});
+  });
 
   // -- Add new markers to a map
   app.put('/:id', isAuthenticated, (req, res) => {
@@ -180,9 +180,7 @@ module.exports = (knex) => {
     }
   });
 
-
   app.post('/:id/favorites', isAuthenticated, (req, res) => {
-
     const userId = req.session.userID;
     const mapId =  req.params.id;
 
@@ -213,9 +211,7 @@ module.exports = (knex) => {
         });
       }
     });
-
   });
-
 
 // function that checks the user is logged in
 function isAuthenticated (req, res, next) {
@@ -225,7 +221,6 @@ function isAuthenticated (req, res, next) {
       res.redirect('/');
     }
   }
-
   return app;
 };
 

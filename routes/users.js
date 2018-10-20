@@ -11,7 +11,6 @@ router.use(cookieSession({
   keys: ['userID']
 }));
 
-
 module.exports = (knex) => {
 
   router.get("/", (req, res) => {
@@ -46,37 +45,23 @@ module.exports = (knex) => {
       });
   });
 
-
-
-router.get('/:id', (req, res) => {
-  if (req.session.userID) {
-    knex('users')
-    .join("favorites", 'users.id', '=', 'favorites.user_id')
-    .join("maps", 'maps.id', '=', 'favorites.map_id')
-      .where({
-        user_id: req.session.userID,
-      })
-      .then((results) => {
-      res.render('user-view',{ results: results});
-      });
-  } else {
-    res.redirect('/');
-  }
-
-
-
-
-
-
-});
-
-
-
+  router.get('/:id', (req, res) => {
+    if (req.session.userID) {
+      knex('users')
+      .join("favorites", 'users.id', '=', 'favorites.user_id')
+      .join("maps", 'maps.id', '=', 'favorites.map_id')
+        .where({
+          user_id: req.session.userID,
+        })
+        .then((results) => {
+        res.render('user-view',{ results: results});
+        });
+    } else {
+      res.redirect('/');
+    }
+  });
   return router;
-
-
-
-}
+};
 
 
 

@@ -1,3 +1,4 @@
+
 exports.seed = function(knex, Promise) {
   return knex('markers').del()
     .then(function () {

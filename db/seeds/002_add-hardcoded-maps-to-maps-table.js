@@ -1,6 +1,5 @@
 
 exports.seed = function(knex, Promise) {
-  // Deletes ALL existing entries
   return knex('maps')
     .then(function () {
       return knex.raw('ALTER SEQUENCE maps_id_seq RESTART WITH 1');
