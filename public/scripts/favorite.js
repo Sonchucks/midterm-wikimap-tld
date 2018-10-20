@@ -1,19 +1,16 @@
 $(function() {
-    console.log('ready');
   $('#favorite-frm').on('submit', function(event){
     event.preventDefault();
-    console.log('on submit');
-
     const mapID = $(this).find('input[name=map_ID]').val();
     const options = {url: `/maps/${mapID}/favorites`, method: 'post', dataType: 'json', data: {mapID: mapID}};
+    $('#favorite-confirm').slideDown('slow').delay(1500).slideUp('slow');
 
     $.ajax(options)
     .done(response => {
-     console.log(response);
-     $('#favorite-confirm').slideDown('slow').delay(1500).slideUp('slow');
+      return;
     })
     .fail(error => {
-      console.log("Error: ", error);
+      return;
     });
 
   });

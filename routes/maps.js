@@ -197,6 +197,7 @@ module.exports = (knex) => {
           .andWhere("map_id", mapId)
           .del()
           .then( () => {
+            res.status(201).send();
             console.log(`Favorite deleted!`);
           });
       } else {
@@ -207,8 +208,8 @@ module.exports = (knex) => {
         .returning("id")
         .into("favorites")
         .then(function (id) {
-          console.log('Added to favorites')
-          // res.status(201).send();
+          res.status(201).send();
+          console.log('Added to favorites');
         });
       }
     });
