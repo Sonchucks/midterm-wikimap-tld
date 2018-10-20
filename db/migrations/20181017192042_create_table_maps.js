@@ -5,7 +5,7 @@ exports.up = function(knex, Promise) {
         table.string('name');
         table.string('description');
         table.integer('creator_id');
-        table.foreign('creator_id').references('users.id')
+        table.foreign('creator_id').references('users.id').onDelete("cascade");
       });
     };
 

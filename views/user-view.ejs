@@ -40,30 +40,28 @@
 
     <div class="jumbotron jumbotron-fluid">
       <div class="container">
-        <h1 class="display-6">Hello <%=results[0].username%></h1>
+        <h1 class="display-6">Hello <%=favorites[0].username%></h1>
       </div>
     </div>
 
 <div id="accordion" role="tablist">
   <div class="card">
     <div class="card-header" role="tab" id="headingOne">
-      <h5 class="mb-0">
-        <a data-toggle="collapse" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-          My Favorited Maps
-        </a>
-      </h5>
+      <a data-toggle="collapse" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+        <h5 class="mb-0">My Favorited Maps:</h5>
+      </a>
     </div>
 
     <div id="collapseOne" class="collapse" role="tabpanel" aria-labelledby="headingOne">
       <div class="card-body">
        <div class="d-flex justify-content-center">
             <ul id="favorite-list" class="list-group">
-              <% for(var i =0; i < results.length; i++) {%>
+              <% for(var i = 0; i < favorites.length; i++) {%>
                 <li class="list-group-item">
-                  <a href="/maps/<%= results[i].map_id %>">
-                    <p class="title"><%= results[i].name %></p>
+                  <a href="/maps/<%= favorites[i].map_id %>">
+                    <p class="title"><%= favorites[i].name %></p>
                     <p class="description">
-                      <%= results[i].description%>
+                      <%= favorites[i].description%>
                     </p>
                   </a>
                 </li>
@@ -75,33 +73,30 @@
   </div>
   <div class="card">
     <div class="card-header" role="tab" id="headingTwo">
-      <h5 class="mb-0">
-        <a class="collapsed" data-toggle="collapse" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-          Collapsible Group Item #2
-        </a>
-      </h5>
+      <a class="collapsed" data-toggle="collapse" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+        <h5 class="mb-0">Maps I've Contributed To:</h5>
+      </a>
     </div>
     <div id="collapseTwo" class="collapse" role="tabpanel" aria-labelledby="headingTwo">
       <div class="card-body">
-        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid.
+       <div class="d-flex justify-content-center">
+            <ul id="favorite-list" class="list-group">
+              <% for(var i = 0; i < contributions.length; i++) {%>
+                <li class="list-group-item">
+                  <a href="/maps/<%= contributions[i].map_id %>">
+                    <p class="title"><%= contributions[i].name %></p>
+                    <p class="description">
+                      <%= contributions[i].description%>
+                    </p>
+                  </a>
+                </li>
+              <% } %>
+            </ul>
+          </div>
       </div>
     </div>
   </div>
 </div>
-
-
-
-
-
-
-
-
-
-  <b>My Contributed Maps</b>
-  <ul>
-    <li>Contribution 1</li>
-    <li>Contribution 2</li>
-  </ul>
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>

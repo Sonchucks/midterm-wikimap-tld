@@ -56,15 +56,31 @@ router.get('/:id', (req, res) => {
       .where({
         user_id: req.session.userID,
       })
-      .then((results) => {
-      console.log(results);
-      res.render('user-view',{ results: results});
+      .then((favorites) => {
+        knex('users')
+          .join("contributions", 'users.id', '=', 'contributions.user_id')
+          .join("maps", 'maps.id', "=", "contributions.map_id")
+          .where({
+            user_id: req.session.userID,
+          })
+          .then((contributions) => {
+
+            console.log(favorites);
+            console.log(contributions);
+            res.render('user-view',{
+              favorites: favorites,
+              contributions: contributions,
+            });
+          })
 
       });
-  } else {
-    res.redirect('/')
-  }
 
+
+
+
+  } else {
+    res.redirect('/');
+}
 
 
 
