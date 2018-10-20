@@ -146,7 +146,6 @@ module.exports = (knex) => {
       .where('user_id', userId)
       .andWhere('map_id', mapId)
       .then(results => {
-        console.log(results);
         if (results.length !== 0){
           console.log(`do nothing, contributor exists!`);
         } else {
@@ -186,23 +185,32 @@ module.exports = (knex) => {
 
     const userId = req.session.userID;
     const mapId =  req.params.id;
-    console.log(req.params);
 
-    console.log('User ID');
-    console.log(userId);
-    console.log('mapId');
-    console.log(mapId);
-
-
-    knex.insert({
-      user_id: userId,
-      map_id: mapId
-    })
-    .returning("id")
-    .into("favorites")
-    .then(function (id) {
-      console.log('added to favorites')
-      res.status(201).send({msg: "This is working"});
+    knex("favorites")
+    .select("*")
+    .where("user_id", userId)
+    .andWhere("map_id", mapId)
+    .then((results) => {
+      if(results.length !== 0) {
+          knex("favorites")
+          .where("user_id", userId)
+          .andWhere("map_id", mapId)
+          .del()
+          .then( () => {
+            console.log(`Favorite deleted!`);
+          });
+      } else {
+        knex.insert({
+          user_id: userId,
+          map_id: mapId
+        })
+        .returning("id")
+        .into("favorites")
+        .then(function (id) {
+          console.log('Added to favorites')
+          // res.status(201).send();
+        });
+      }
     });
 
   });

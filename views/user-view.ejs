@@ -1,27 +1,67 @@
 <!DOCTYPE html>
-<html>
-<head>
-  <title>User Page!</title>
+<html lang="en">
+  <head>
+    <title>Profile Page</title>
 
-  <link rel="stylesheet" href="/vendor/normalize-4.1.1.css" type="text/css" />
-  <link rel="stylesheet" href="/vendor/border-box.css" type="text/css" />
-  <link rel="stylesheet" href="/styles/map-new-layout.css" type="text/css" />
-  <link href="https://fonts.googleapis.com/css?family=Sigmar+One" rel="stylesheet">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="/vendor/normalize-4.1.1.css" type="text/css" />
+    <link rel="stylesheet" href="/vendor/border-box.css" type="text/css" />
+    <link rel="stylesheet" href="/styles/user-view-layout.css" type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Sigmar+One" rel="stylesheet">
 
-  <script type="text/javascript" src="/scripts/index.js"></script>
+    <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script>
+    <script type="text/javascript" src="/scripts/user-view.js"></script>
+
+
 </head>
 <body>
+    <header>
+      <nav class="navbar navbar-light bg-light">
+        <a class="navbar-brand" href="/">WIKIMAPS</a>
+
+        <ul class="nav">
+
+            <li class="nav-item">
+              <a class="nav-link active" href="/maps/new">New Map</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="/maps">Back to List</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="/logout">Logout</a>
+            </li>
+
+        </ul>
+      </nav>
+    </header>
+
+
+
+
   <h1><%=results[0].username%></h1>
 
-  <b>My Favorited Maps</b>
-  <ul>
-    <% for(var i =0; i < results.length; i++) {%>
-    <li><%=results[i].name%></li>
-    <li><%= results[i].description%></li>
-      <%}%>
-  </ul>
+
+  <button id="favorite">My Favorited Maps</button>
+
+  <div class="d-flex justify-content-center">
+      <ul id="favorite-list" class="list-group">
+        <% for(var i =0; i < results.length; i++) {%>
+          <li class="list-group-item">
+            <a href="/maps/<%= results[i].map_id %>">
+              <p class="title"><%= results[i].name %></p>
+              <p class="description">
+                <%= results[i].description%>
+              </p>
+            </a>
+          </li>
+        <% } %>
+      </ul>
+    </div>
+
+
 
   <b>My Contributed Maps</b>
   <ul>

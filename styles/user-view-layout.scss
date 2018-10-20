@@ -1,0 +1,23 @@
+@import 'variables';
+
+body {
+  header {
+    font-family: $headerFontStack;
+  }
+
+    #favorite-list {
+      li {
+        margin: 1em 0;
+        width: 300px;
+
+        .title {
+          color: black;
+          border-bottom: solid 1px black;
+        }
+        .description {
+          color: black
+        }
+      }
+    }
+
+}
