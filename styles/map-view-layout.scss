@@ -6,12 +6,8 @@ body {
     text-align: center;
   }
 
-  #edit-map {
-    margin-right: auto;
-    margin-left: auto;
-  }
 
-  div {
+  #map-info {
     margin: 2em 0;
     ul {
       li {
@@ -23,6 +19,21 @@ body {
     }
   }
 
+  footer {
+    margin-bottom: 1em;
+  }
+  #edit-map {
+    input {
+      width: 100%;
+    }
+  }
+
+  #favorite-frm {
+    input {
+      width: 100%;
+    }
+  }
+
   #mapid {
     margin: 2em auto;
     height: 600px;
@@ -30,10 +41,12 @@ body {
     z-index: 1;
   }
 
-  #favorite-frm {
+  #favorite-confirm {
+    display: none;
     margin-left: auto;
     margin-right: auto;
   }
+
 
 }
 
