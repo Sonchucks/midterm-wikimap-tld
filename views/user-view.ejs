@@ -13,13 +13,14 @@
   <script type="text/javascript" src="/scripts/index.js"></script>
 </head>
 <body>
-  <h1>Username</h1>
+  <h1><%=results[0].username%></h1>
 
   <b>My Favorited Maps</b>
   <ul>
-    <li>Favorite 1</li>
-    <li>Favorite 2</li>
-
+    <% for(var i =0; i < results.length; i++) {%>
+    <li><%=results[i].name%></li>
+    <li><%= results[i].description%></li>
+      <%}%>
   </ul>
 
   <b>My Contributed Maps</b>

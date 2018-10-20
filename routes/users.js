@@ -46,24 +46,26 @@ module.exports = (knex) => {
       });
   });
 
- 
+
 
 router.get('/:id', (req, res) => {
   knex('users')
   .join("favorites", 'users.id', '=', 'favorites.user_id')
+  .join("maps", 'maps.id', '=', 'favorites.map_id')
     .where({
-      user_id: req.session.userID, 
+      user_id: req.session.userID,
     })
     .then((results) => {
-    res.render('user-view', results);
+    console.log(results);
+    res.render('user-view',{ results: results});
 
     });
-    
 
 
 
 
-  
+
+
 });
 
 
@@ -71,7 +73,7 @@ router.get('/:id', (req, res) => {
   return router;
 
 
-  
+
 }
 
 
