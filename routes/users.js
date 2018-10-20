@@ -86,8 +86,6 @@ router.get('/:id', (req, res) => {
 });
 
 
-
->>>>>>> layout
   return router;
 };
 
