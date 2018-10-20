@@ -47,14 +47,8 @@ module.exports = (knex) => {
   });
 
  
- 
-  // .join('maps', 'markers.map_id', '=', 'maps.id')
-//       .join('users', 'maps.creator_id', '=', 'users.id')
 
 router.get('/:id', (req, res) => {
-  // const userName = req.body.userID
-  // const favoritedMaps = req.body.favoritedMaps
-  
   knex('users')
   .join("favorites", 'users.id', '=', 'favorites.user_id')
     .where({
@@ -68,7 +62,7 @@ router.get('/:id', (req, res) => {
 
 
 
-  res.render('user_view')
+  res.render('user-view')
 });
 
 
