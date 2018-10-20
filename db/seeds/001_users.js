@@ -13,7 +13,8 @@ exports.seed = function(knex, Promise) {
       return Promise.all([
         knex('users').insert({username: 'Alice', email: 'alice@gmail.com', password: '214$!@5697124$!@$'}),
         knex('users').insert({username: 'Bob', email: 'bob@gmail.com', password: 'bob'}),
-        knex('users').insert({username: 'Charlie', email: 'charlie@gmail.com', password: '5325#%1#23$!@#%'})
+        knex('users').insert({username: 'Charlie', email: 'charlie@gmail.com', password: '5325#%1#23$!@#%'}),
+        knex('users').insert({username: 'David Son', email: 'hyun.uk.son@gmail.com', password: 'password'})
       ]);
     });
 };
