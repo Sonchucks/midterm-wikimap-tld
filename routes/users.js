@@ -46,25 +46,30 @@ module.exports = (knex) => {
       });
   });
 
- 
+
 
 router.get('/:id', (req, res) => {
-  knex('users')
-  .join("favorites", 'users.id', '=', 'favorites.user_id')
-    .where({
-      user_id: req.session.userID, 
-    })
-    .then((results) => {
-    console.log(results);
-    res.render('user-view',{ results: results});
+  if (req.session.userID) {
+    knex('users')
+    .join("favorites", 'users.id', '=', 'favorites.user_id')
+    .join("maps", 'maps.id', '=', 'favorites.map_id')
+      .where({
+        user_id: req.session.userID,
+      })
+      .then((results) => {
+      console.log(results);
+      res.render('user-view',{ results: results});
 
-    });
-    
+      });
+  } else {
+    res.redirect('/')
+  }
 
 
 
 
-  
+
+
 });
 
 
@@ -72,7 +77,7 @@ router.get('/:id', (req, res) => {
   return router;
 
 
-  
+
 }
 
 
