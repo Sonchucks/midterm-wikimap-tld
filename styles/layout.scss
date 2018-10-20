@@ -1,61 +1,37 @@
+@import 'variables';
+
 body {
-  background-color: #EEE;
+
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
 
-  h1 {
-    align-self: center;
-    font-size: 1.5em;
-    font-family: 'Sigmar One', cursive;
-    text-align: center;
+
+  header {
+    h1 {
+      font-family: $headerFontStack;
+      text-align: center;
+    }
   }
+
   #nav-buttons {
-    align-self: center;
-    display: flex;
-    flex-direction: column;
+    margin-top: 4em;
+    text-align: center;
 
-      .view-maps {
-        align-self: center;
-        margin-bottom: 1em;
+    button {
+      color: black;
 
-        i {
-          visibility: hidden;
-        }
+      i {
+        visibility: hidden;
       }
 
-      .view-maps:hover {
-        cursor: pointer;
+    }
 
-        i {
-          visibility: visible;
-        }
+    button:hover {
+      i {
+        visibility: visible;
       }
-
-      .login-button {
-        align-self: center;
-
-        i {
-          visibility: hidden;
-        }
-      }
-
-      .login-button:hover {
-        cursor: pointer;
-
-        i {
-          visibility: visible;
-        }
-      }
-
-      .login-form {
-        display: none;
-      }
-
-
+    }
   }
 }

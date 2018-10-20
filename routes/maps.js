@@ -55,12 +55,14 @@ module.exports = (knex) => {
       knex("markers")
       .join('maps', 'markers.map_id', '=', 'maps.id')
       .join('users', 'maps.creator_id', '=', 'users.id')
-      .select("markers.content", "markers.coords")
+      .select("markers.content", "markers.coords", "markers.title", "markers.image_url")
       .where("maps.id", req.params.id)
       .then((mapDetails) => {
           let mapID = {id: req.params.id};
           let mapArray = mapDetails.map( (element) => {
             return {
+              title: element.title,
+              image_url: element.image_url,
               coords: element.coords,
               content: element.content
             };
@@ -95,8 +97,8 @@ module.exports = (knex) => {
           let mapID = {id: req.params.id};
           let mapArray = mapDetails.map( (element) => {
             return {
-              name: element.name,
-              description: element.description,
+              title: element.title,
+              image_url: element.image_url,
               coords: element.coords,
               content: element.content
             };
@@ -104,7 +106,7 @@ module.exports = (knex) => {
           res.render('map-edit', {mapArray, mapID, mapData});
         });
     });
-  });
+  })
 
 
   // -- Creates a new map
@@ -133,6 +135,7 @@ module.exports = (knex) => {
       res.send();
     } else {
       const updates = req.body.update;
+      console.log(updates);
       res.status(201);
       res.send();
       knex('markers')
@@ -142,6 +145,8 @@ module.exports = (knex) => {
           for (let element of updates) {
             knex('markers')
               .insert({
+                title: element.title,
+                image_url: element.image,
                 content: element.content,
                 coords: element.coords,
                 map_id: req.params.id
@@ -189,6 +194,8 @@ function isAuthenticated (req, res, next) {
       res.redirect('/');
     }
   }
+
   return app;
 };
+
 

@@ -1,11 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Home Page</title>
+    <title>Viewing Map</title>
 
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" href="/vendor/normalize-4.1.1.css" type="text/css" />
     <link rel="stylesheet" href="/vendor/border-box.css" type="text/css" />
     <link rel="stylesheet" href="/styles/map-view-layout.css" type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Sigmar+One" rel="stylesheet">
+
 
     <!-- Imports Leaflet Stylesheet -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css"
@@ -25,25 +31,55 @@
   </head>
 
   <body>
-    <nav id="nav-bar">
-      <h1><%= mapData.map_name%></h1>
-      <h6><%= mapData.map_description%></h6>
-      <div class="map-list">
-        <button type="button">Back to List</button>
-      </div>
 
-      <% if (id) { %>
+    <header>
+      <nav class="navbar navbar-light bg-light">
+        <a class="navbar-brand" href="/">WIKIMAPS</a>
 
-      <form class="edit" action="/maps/edit/<%= mapID.id %>" method="GET">
-        <input type="submit" value="EDIT"></input>
-      </form>
+        <ul class="nav">
 
-      <% } %>
+          <% if (id) { %>
+            <li class="nav-item">
+              <a class="nav-link active" href="/maps/new">New Map</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="/maps">Back to List</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="/logout">Logout</a>
+            </li>
+          <% } else { %>
+            <li class="nav-item">
+              <a class="nav-link active" href="/login">Login</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="/login">Register</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="/maps">Back to List</a>
+            </li>
+          <% } %>
 
+        </ul>
+      </nav>
+    </header>
 
-    </nav>
+    <div class="d-flex justify-content-center">
+      <ul class="list-group">
+          <li class="list-group-item">
+              <p class="title"><%= mapData.map_name%></p>
+              <p class="description"><%= mapData.map_description%></p>
+            </a>
+          </li>
+      </ul>
+    </div>
 
-    <div id="mapid">
+    <div id="edit-map" class="d-flex justify-content-center">
+      <a href="/maps/edit/<%= mapID.id %>">
+        <button type="button" class="btn btn-outline-primary">Edit</button>
+      </a>
+    </div>
+    <div id="mapid" class="container">
     <script>
 
       var map = L.map('mapid').setView([0, 0], 2);
@@ -61,11 +97,13 @@
       console.log(mapInfo);
 
       for(var loop = 0; loop < mapInfo.length; loop++) {
+        var title = mapInfo[loop].title;
+        var image = mapInfo[loop].image_url;
         var coordinates = mapInfo[loop].coords;
         var content = mapInfo[loop].content;
         var marker = L.marker(coordinates, {title: 'marker', riseOnHover: true}).addTo(map);
         marker
-          .bindPopup("<p>" + content + "</p>");
+          .bindPopup("<p><b>" + title+ "</b><br>" + content + '</p><br><image src="' + image + '">');
         markers.addLayer(marker);
       }
 
@@ -77,9 +115,10 @@
     </script>
 
   </div>
-  <form id='favorite-frm'>
-      <input type="submit" value="Favorite Button">
+
+    <form id='favorite-frm' class="d-flex justify-content-center">
       <input name="map_ID" type="hidden" value='<%=mapID.id%>'>
+      <input type="submit" class="btn btn-outline-primary" value="Favorite Button">
     </form>
   </body>
 </html>

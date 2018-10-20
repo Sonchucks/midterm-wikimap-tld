@@ -1,12 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Home Page</title>
+    <title>Edit a Map</title>
 
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" href="/vendor/normalize-4.1.1.css" type="text/css" />
     <link rel="stylesheet" href="/vendor/border-box.css" type="text/css" />
-    <link rel="stylesheet" href="/styles/map-view-layout.css" type="text/css" />
-    <link rel="stylesheet" href="/styles/modal.css" type="text/css" />
+    <link rel="stylesheet" href="/styles/map-edit-layout.css" type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Sigmar+One" rel="stylesheet">
+
 
     <!-- Imports Leaflet Stylesheet -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css"
@@ -19,25 +24,53 @@
    integrity="sha512-nMMmRyTVoLYqjP9hrbed9S+FzjZHW5gY1TWCHA5ckwXZBadntCNs8kEqAWdrb9O7rxbCaA4lKTIWjDXZxflOcA=="
    crossorigin=""></script>
 
-    <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script>
+   <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script>
+   <script src="/scripts/favorite.js"></script>
     <script type="text/javascript" src="/scripts/index.js"></script>
+
   </head>
 
   <body>
-    <nav id="nav-bar">
-      <h1> <%= mapData.map_name %> </h1>
-      <h6> <%= mapData.map_description %> </h6>
-      <span class="header"></span>
-      <div class="map-list">
-        <button type="button">Main Page</button>
-      </div>
+
+    <header>
+      <nav class="navbar navbar-light bg-light">
+        <a class="navbar-brand" href="/">WIKIMAPS</a>
+
+        <ul class="nav">
+          <li class="nav-item">
+            <a class="nav-link active" href="/maps/new">New Map</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="/maps">Back to List</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="/maps/<%= mapID.id %>">Back to View</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="/logout">Logout</a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+
+    <div class="d-flex justify-content-center">
+      <ul class="list-group">
+          <li class="list-group-item">
+              <p class="title"><%= mapData.map_name%></p>
+              <p class="description"><%= mapData.map_description%></p>
+            </a>
+          </li>
+      </ul>
+    </div>
 
       <div class="modal">
         <div class="modal-content">
           <button class="close-modal">✖</button>
           <p></p>
           <form class="modal-input">
-            <textarea placeholder="Enter your new text here..."></textarea>
+            <textarea id="title" placeholder="Enter your new title here..."></textarea>
+            <textarea id="content" placeholder="Enter your new text here..."></textarea>
+            <textarea id="image" placeholder="Enter your new image url here..."></textarea>
             <button type="button" class="update-marker">Update</button>
           </form>
         </div>
@@ -62,16 +95,20 @@
       var mapInfo = <%- JSON.stringify(mapArray)%>;
 
       for(var loop = 0; loop < mapInfo.length; loop++) {
+        var title = mapInfo[loop].title;
+        var image = mapInfo[loop].image_url;
         var coordinates = mapInfo[loop].coords;
         var content = mapInfo[loop].content;
         var marker = L.marker(coordinates, {title: 'marker', riseOnHover: true, draggable: true})
           .addTo(map)
           .on('dragend', updateCoords);
         marker
-          .bindPopup('<p>' + content + '</p><br><button type="button" class="delete" id="' + marker._leaflet_id + '">Delete</button>'
+          .bindPopup('<b><p>' + title+ '<br></b>' + content + '</p><br><img src="' + image + '"><br><button type="button" class="delete" id="' + marker._leaflet_id + '">Delete</button>'
             + '<button type="button" class="edit" id="' + marker._leaflet_id + '">Edit</button>');
         markers.addLayer(marker);
         markerData[marker._leaflet_id] = {
+            title: title,
+            image: image,
             content: content,
             coords: coordinates
           };
@@ -97,20 +134,28 @@
       $("body").on("click", ".edit", function() {
         var markerToEditID = parseInt($(this).attr('id'), 10);
         $('.modal').data('marker_id', markerToEditID).show();
-        $('.modal p').text(markerToEditID);
+        $('.modal #title').text(markerData[markerToEditID].title);
+        $('.modal #content').text(markerData[markerToEditID].content);
+        $('.modal #image').text(markerData[markerToEditID].image);
         map.closePopup();
-        $('.modal p').text(markerData[markerToEditID].content);
       });
 
       $("body").on("click", ".update-marker", function() {
-        var newContent = htmlWiper($(this).prev('textarea').val());
+        var newContent = htmlWiper($('.modal #content').val(), "content");
+        var newTitle = htmlWiper($('.modal #title').val(), "title");
+        var newImage = htmlWiper($('.modal #image').val(), "image");
         var updateMarkerID = $('.modal').data('marker_id');
-        $(this).prev('textarea').val("");
         markerData[updateMarkerID].content = newContent;
+        markerData[updateMarkerID].title = newTitle;
+        markerData[updateMarkerID].image = newImage;
+        console.log("markers object:");
+        console.log(markers);
         markers.eachLayer(function (layer) {
+          console.log("current layer:");
+          console.log(layer);
           if (layer._leaflet_id === $('.modal').data('marker_id')) {
-            layer._popup._content = '<p>' + newContent + '</p><br><button type="button" class="delete" id="' + layer._leaflet_id + '">Delete</button>' +
-            '<button type="button" class="edit" id="' + layer._leaflet_id + '">Edit</button>';
+            layer._popup._content = '<b><p>' + newTitle+ '</b><br>' + newContent + '</p><br><img src="' + newImage + '"><br><button type="button" class="delete" id="' + layer._leaflet_id + '">Delete</button>'
+            + '<button type="button" class="edit" id="' + layer._leaflet_id + '">Edit</button>';
           }
         });
         $('.modal').hide();
@@ -128,20 +173,28 @@
           .on('dragend', updateCoords);
         var bounds = new L.latLngBounds();
         newMarker
-          .bindPopup('<p>This is a new marker!</p><br><button type="button" class="delete" id="' + newMarker._leaflet_id + '">Delete</button>' +
+          .bindPopup('<p><b>New Marker</b><br>Tell us about this place!</p><br><button type="button" class="delete" id="' + newMarker._leaflet_id + '">Delete</button>' +
             '<button type="button" class="edit" id="' + newMarker._leaflet_id + '">Edit</button>')
           .openPopup();
         markers.addLayer(newMarker);
         markerData[newMarker._leaflet_id]=
           {
-            content: "Why don't you add some new content to this marker!",
+            title: "New Marker",
+            image: "",
+            content: "Tell us about this place!",
             coords: coords
           };
       }
 
-      function htmlWiper(content) {
+      function htmlWiper(content, type) {
         if (!content) {
-          return "Add a description for this marker!";
+          if ( type === "content") {
+            return "Tell us about this place!";
+          } else if ( type === "title") {
+            return "New Marker";
+          } else if ( type === "image") {
+            return;
+          }
         }
         var cleanedContent = content.replace(/\<(.*?)\>/g, "")
           .replace(/Edit/g, "")
@@ -166,16 +219,18 @@
             var markerSubmit = Object.keys(markerData).map( function (markerID) {
               return markerData[markerID];
             })
-            $.ajax('/maps/<%= mapID.id %>', {method: 'PUT', data: {update: markerSubmit}});
             console.log(markerSubmit);
+            $.ajax('/maps/<%= mapID.id %>', {method: 'PUT', data: {update: markerSubmit}});
           }
         });
       });
 
     </script>
   </div>
+
   <div class="finish">
     <button type="button">Finish Editing</button>
   </div>
   </body>
 </html>
+
