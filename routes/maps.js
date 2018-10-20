@@ -130,16 +130,38 @@ module.exports = (knex) => {
 
   // -- Add new markers to a map
   app.put('/:id', isAuthenticated, (req, res) => {
-    if(!req.body.update) {
+    const mapId = req.params.id;
+    const userId = req.session.userID;
+
+    if(!req.body.update || !userId) {
       res.status(400);
       res.send();
     } else {
       const updates = req.body.update;
-      console.log(updates);
       res.status(201);
       res.send();
+
+      knex('contributions')
+      .select('*')
+      .where('user_id', userId)
+      .andWhere('map_id', mapId)
+      .then(results => {
+        console.log(results);
+        if (results.length !== 0){
+          console.log(`do nothing, contributor exists!`);
+        } else {
+          knex('contributions')
+            .insert({
+              user_id: userId,
+              map_id: mapId
+            }).then( () => {
+              console.log(`contributor added!`);
+            });
+        }
+      });
+
       knex('markers')
-        .where('map_id', req.params.id)
+        .where('map_id', mapId)
         .del()
         .then( () => {
           for (let element of updates) {
@@ -149,7 +171,7 @@ module.exports = (knex) => {
                 image_url: element.image,
                 content: element.content,
                 coords: element.coords,
-                map_id: req.params.id
+                map_id: mapId
               })
               .then(function () {
                 console.log('Update complete');

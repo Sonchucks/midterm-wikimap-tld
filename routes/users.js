@@ -46,9 +46,34 @@ module.exports = (knex) => {
       });
   });
 
+ 
+
+router.get('/:id', (req, res) => {
+  knex('users')
+  .join("favorites", 'users.id', '=', 'favorites.user_id')
+    .where({
+      user_id: req.session.userID, 
+    })
+    .then((results) => {
+    res.render('user-view', results);
+
+    });
+    
+
+
+
+
+  
+});
+
+
 
   return router;
+
+
+  
 }
+
 
 
 

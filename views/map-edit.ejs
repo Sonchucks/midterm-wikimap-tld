@@ -80,7 +80,7 @@
             <input type="text" class="form-control" id="image" placeholder="Enter your new image url here...">
           </div>
           <div class="form-group">
-            <button class="close-modal">✖</button>
+            <button type="button" class="close-modal">✖</button>
             <button type="button" class="update-marker">Update</button>
           </div>
         </form>
@@ -143,10 +143,13 @@
 
       $("body").on("click", ".edit", function() {
         var markerToEditID = parseInt($(this).attr('id'), 10);
+        console.log(markerData[markerToEditID].title);
+        console.log(markerData[markerToEditID].content);
+        console.log(markerData[markerToEditID].image);
         $('.modal').data('marker_id', markerToEditID).show();
-        $('.modal #title').text(markerData[markerToEditID].title);
+        $('.modal #title').attr("value", markerData[markerToEditID].title);
         $('.modal #content').text(markerData[markerToEditID].content);
-        $('.modal #image').text(markerData[markerToEditID].image);
+        $('.modal #image').attr("value", markerData[markerToEditID].image);
         map.closePopup();
       });
 
