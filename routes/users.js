@@ -55,14 +55,15 @@ router.get('/:id', (req, res) => {
       user_id: req.session.userID, 
     })
     .then((results) => {
-      console.log("These are my,", results);
-    })
+    res.render('user-view', results);
+
+    });
     
 
 
 
 
-  res.render('user-view')
+  
 });
 
 
