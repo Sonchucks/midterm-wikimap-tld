@@ -106,7 +106,7 @@ module.exports = (knex) => {
           res.render('map-edit', {mapArray, mapID, mapData});
         });
     });
-  });
+  })
 
 
   // -- Creates a new map
@@ -194,6 +194,8 @@ function isAuthenticated (req, res, next) {
       res.redirect('/');
     }
   }
+
   return app;
 };
+
 
