@@ -64,7 +64,7 @@
       </nav>
     </header>
 
-    <div class="d-flex justify-content-center">
+    <div id="map-info" class="d-flex justify-content-center">
       <ul class="list-group">
           <li class="list-group-item">
               <p class="title"><%= mapData.map_name%></p>
@@ -74,11 +74,6 @@
       </ul>
     </div>
 
-    <div id="edit-map" class="d-flex justify-content-center">
-      <a href="/maps/edit/<%= mapID.id %>">
-        <button type="button" class="btn btn-outline-primary">Edit</button>
-      </a>
-    </div>
     <div id="mapid" class="container">
     <script>
 
@@ -116,10 +111,27 @@
 
   </div>
 
-    <form id='favorite-frm' class="d-flex justify-content-center">
-      <input name="map_ID" type="hidden" value='<%=mapID.id%>'>
-      <input type="submit" class="btn btn-outline-primary" value="Favorite Button">
-    </form>
+<footer>
+  <% if (id) { %>
+    <div class="row justify-content-center">
+      <form id="edit-map" class="col-3" action="/maps/edit/<%= mapID.id %>" method="GET">
+        <input type="submit" class="btn btn-outline-primary" value="Edit">
+      </form>
+
+        <form id='favorite-frm' class="col-3">
+          <input name="map_ID" type="hidden" value='<%= mapID.id %>'>
+          <input type="submit" class="btn btn-outline-primary" value="Favorite">
+        </form>
+    </div>
+  <% } %>
+</footer>
+
+  <div id="favorite-confirm" class="alert alert-success col-6">
+    <strong>This map has been added to your favorites!</strong>
+  </div>
+
+
+
   </body>
 </html>
 
