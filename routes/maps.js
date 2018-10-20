@@ -192,7 +192,6 @@ module.exports = (knex) => {
     .andWhere("map_id", mapId)
     .then((results) => {
       if(results.length !== 0) {
-        console.log("This is already favorited!");
           knex("favorites")
           .where("user_id", userId)
           .andWhere("map_id", mapId)
@@ -201,7 +200,6 @@ module.exports = (knex) => {
             console.log(`Favorite deleted!`);
           });
       } else {
-        console.log("This hasn't been favorited...");
         knex.insert({
           user_id: userId,
           map_id: mapId
@@ -209,8 +207,8 @@ module.exports = (knex) => {
         .returning("id")
         .into("favorites")
         .then(function (id) {
-          console.log('added to favorites')
-          res.status(201).send({msg: "This is working"});
+          console.log('Added to favorites')
+          // res.status(201).send();
         });
       }
     });
