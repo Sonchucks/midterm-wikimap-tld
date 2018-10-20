@@ -46,9 +46,39 @@ module.exports = (knex) => {
       });
   });
 
+ 
+ 
+  // .join('maps', 'markers.map_id', '=', 'maps.id')
+//       .join('users', 'maps.creator_id', '=', 'users.id')
+
+router.get('/:id', (req, res) => {
+  // const userName = req.body.userID
+  // const favoritedMaps = req.body.favoritedMaps
+  
+  knex('users')
+  .join("favorites", 'users.id', '=', 'favorites.user_id')
+    .where({
+      user_id: req.session.userID, 
+    })
+    .then((results) => {
+      console.log("These are my,", results);
+    })
+    
+
+
+
+
+  res.render('user_view')
+});
+
+
 
   return router;
+
+
+  
 }
+
 
 
 
