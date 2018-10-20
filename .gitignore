@@ -7,3 +7,5 @@ test/
 .DS_Store
 
 public/scripts/test.js
+styles/test.scss
+views/test.ejs
