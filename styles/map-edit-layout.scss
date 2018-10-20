@@ -6,12 +6,7 @@ body {
     text-align: center;
   }
 
-  #edit-map {
-    margin-right: auto;
-    margin-left: auto;
-  }
-
-  div {
+  #map-info {
     margin: 2em 0;
     ul {
       li {
@@ -26,14 +21,28 @@ body {
   #mapid {
     margin: 2em auto;
     height: 600px;
-    width: 800px;
+    width: 600px;
     z-index: 1;
   }
 
-  #favorite-frm {
+  #finish {
+    margin-bottom: 1em;
+  }
+
+  #finish-confirm {
+    display: none;
     margin-left: auto;
     margin-right: auto;
   }
+
+  .leaflet-popup-content-wrapper {
+    img {
+    max-width: 100%;
+    max-height: 100%;
+    }
+
+  }
+
 
 }
 
