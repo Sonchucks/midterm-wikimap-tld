@@ -53,7 +53,7 @@
       </nav>
     </header>
 
-    <div class="d-flex justify-content-center">
+    <div id="map-info" class="d-flex justify-content-center">
       <ul class="list-group">
           <li class="list-group-item">
               <p class="title"><%= mapData.map_name%></p>
@@ -63,19 +63,29 @@
       </ul>
     </div>
 
-      <div class="modal">
-        <div class="modal-content">
-          <button class="close-modal">✖</button>
-          <p></p>
-          <form class="modal-input">
-            <textarea id="title" placeholder="Enter your new title here..."></textarea>
-            <textarea id="content" placeholder="Enter your new text here..."></textarea>
-            <textarea id="image" placeholder="Enter your new image url here..."></textarea>
+    <div class="modal">
+      <div class="modal-content">
+        <p></p>
+        <form class="modal-input">
+          <div class="form-group">
+            <label for="title">Title:</label>
+            <input type="text" class="form-control" id="title" placeholder="Enter your new title here...">
+          </div>
+          <div class="form-group">
+            <label for="content">Description:</label>
+            <textarea class="form-control" id="content" placeholder="Enter your new text here..."></textarea>
+          </div>
+          <div class="form-group">
+            <label for="image">Image:</label>
+            <input type="text" class="form-control" id="image" placeholder="Enter your new image url here...">
+          </div>
+          <div class="form-group">
+            <button class="close-modal">✖</button>
             <button type="button" class="update-marker">Update</button>
-          </form>
-        </div>
+          </div>
+        </form>
       </div>
-    </nav>
+    </div>
 
     <div id="mapid">
     <script>
@@ -212,7 +222,7 @@
 
       // -- Send data once updates are completed
       $('document').ready(function() {
-        $(".finish").find('button').click(function () {
+        $("#finish").find('button').click(function () {
           if(Object.keys(markerData).length === 0) {
             alert("Oops, your map needs to have at least one marker!");
           } else {
@@ -220,7 +230,10 @@
               return markerData[markerID];
             })
             console.log(markerSubmit);
-            $.ajax('/maps/<%= mapID.id %>', {method: 'PUT', data: {update: markerSubmit}});
+            $.ajax('/maps/<%= mapID.id %>', {method: 'PUT', data: {update: markerSubmit}})
+              .done(function() {
+                $('#finish-confirm').slideDown('slow').delay(1500).slideUp('slow');
+              });
           }
         });
       });
@@ -228,9 +241,14 @@
     </script>
   </div>
 
-  <div class="finish">
-    <button type="button">Finish Editing</button>
-  </div>
+    <div id="finish" class="row justify-content-center">
+      <button type="button" class="btn btn-outline-primary">Finish Editing</button>
+    </div>
+
+    <div id="finish-confirm" class="alert alert-success col-6">
+      <strong>The map has been updated!</strong>
+    </div>
+
   </body>
 </html>
 
