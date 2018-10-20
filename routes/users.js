@@ -55,7 +55,8 @@ router.get('/:id', (req, res) => {
       user_id: req.session.userID, 
     })
     .then((results) => {
-    res.render('user-view', results);
+    console.log(results);
+    res.render('user-view',{ results: results});
 
     });
     
