@@ -52,7 +52,11 @@ app.use("/maps", mapRoutes(knex));
 
 // Home page
 app.get("/", (req, res) => {
+  if (req.session.userID) {
+    res.redirect('/maps');
+  } else {
   res.render("index");
+  }
 });
 
 app.get('/logout', (req, res) => {

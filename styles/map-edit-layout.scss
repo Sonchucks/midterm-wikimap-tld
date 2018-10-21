@@ -18,6 +18,15 @@ body {
     }
   }
 
+  .modal {
+    width: 80%;
+    margin: 4em auto;
+
+    form {
+      padding: 0 2em;
+    }
+  }
+
   #mapid {
     margin: 2em auto;
     height: 600px;

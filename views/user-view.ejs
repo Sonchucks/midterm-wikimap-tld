@@ -13,7 +13,6 @@
     <link href="https://fonts.googleapis.com/css?family=Sigmar+One" rel="stylesheet">
 
     <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script>
-    <script type="text/javascript" src="/scripts/user-view.js"></script>
 
   </head>
   <body>
@@ -76,7 +75,7 @@
     <div id="collapseTwo" class="collapse" role="tabpanel" aria-labelledby="headingTwo">
       <div class="card-body">
        <div class="d-flex justify-content-center">
-            <ul id="favorite-list" class="list-group">
+            <ul id="contribution-list" class="list-group">
               <% for(var i = 0; i < contributions.length; i++) {%>
                 <li class="list-group-item">
                   <a href="/maps/<%= contributions[i].map_id %>">

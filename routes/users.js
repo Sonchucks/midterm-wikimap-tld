@@ -46,35 +46,35 @@ module.exports = (knex) => {
   });
 
 router.get('/:id', (req, res) => {
+  const id = req.session.userID
   if (req.session.userID) {
-    knex('users')
-    .join("favorites", 'users.id', '=', 'favorites.user_id')
-    .join("maps", 'maps.id', '=', 'favorites.map_id')
-      .where({
-        user_id: req.session.userID,
-      })
-      .then((favorites) => {
+    if (id == req.params.id) {
         knex('users')
-          .join("contributions", 'users.id', '=', 'contributions.user_id')
-          .join("maps", 'maps.id', "=", "contributions.map_id")
+        .join("favorites", 'users.id', '=', 'favorites.user_id')
+        .join("maps", 'maps.id', '=', 'favorites.map_id')
           .where({
             user_id: req.session.userID,
           })
-          .then((contributions) => {
+          .then((favorites) => {
+            knex('users')
+              .join("contributions", 'users.id', '=', 'contributions.user_id')
+              .join("maps", 'maps.id', "=", "contributions.map_id")
+              .where({
+                user_id: req.session.userID,
+              })
+              .then((contributions) => {
 
-            console.log(favorites);
-            console.log(contributions);
-            res.render('user-view',{
-              favorites: favorites,
-              contributions: contributions,
+                console.log(favorites);
+                console.log(contributions);
+                res.render('user-view',{
+                  favorites: favorites,
+                  contributions: contributions,
+                });
+              });
             });
-          })
-
-      });
-
-
-
-
+    } else {
+      res.redirect('/maps');
+    }
   } else {
     res.redirect('/');
 }

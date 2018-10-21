@@ -1,8 +1,6 @@
 const express = require('express');
 const app  = express.Router();
-const PORT = 8000;
-const bodyParser = require('body-parser')
-const cookieSession = require('cookie-session')
+const cookieSession = require('cookie-session');
 
 app.use(cookieSession({
   name: 'session',
@@ -40,38 +38,38 @@ module.exports = (knex) => {
   app.get("/:id", (req, res) => {
     const id = req.session.userID;
     let mapData = {};
-    let mapDetails = {};
 
     // First fetch the name data for the correct map
     // then fetch the marker data for that map
     knex("maps")
-    .distinct('maps.name', 'maps.description')
-    .select()
-    .where('maps.id', req.params.id)
-    .then( (results) => {
-      mapData = {
-        map_name: results[0].name,
-        map_description: results[0].description
-      };
-    }).then(() => {
-      knex("markers")
-      .join('maps', 'markers.map_id', '=', 'maps.id')
-      .join('users', 'maps.creator_id', '=', 'users.id')
-      .select("markers.content", "markers.coords", "markers.title", "markers.image_url")
-      .where("maps.id", req.params.id)
-      .then((mapDetails) => {
-          let mapID = {id: req.params.id};
-          let mapArray = mapDetails.map( (element) => {
-            return {
-              title: element.title,
-              image_url: element.image_url,
-              coords: element.coords,
-              content: element.content
-            };
+      .distinct('maps.name', 'maps.description')
+      .select()
+      .where('maps.id', req.params.id)
+      .then( (results) => {
+        mapData = {
+          map_name: results[0].name,
+          map_description: results[0].description
+        };
+      })
+      .then(() => {
+        knex("markers")
+          .join('maps', 'markers.map_id', '=', 'maps.id')
+          .join('users', 'maps.creator_id', '=', 'users.id')
+          .select("markers.content", "markers.coords", "markers.title", "markers.image_url")
+          .where("maps.id", req.params.id)
+          .then((mapDetails) => {
+            let mapID = {id: req.params.id};
+            let mapArray = mapDetails.map( (element) => {
+              return {
+                title: element.title,
+                image_url: element.image_url,
+                coords: element.coords,
+                content: element.content
+              };
+            });
+            res.render('map-view', {mapArray, id, mapID, mapData});
           });
-        res.render('map-view', {mapArray, id, mapID, mapData});
       });
-    });
   });
 
   // -- Allows a user to access the edit form if they are authenticated
@@ -190,7 +188,7 @@ module.exports = (knex) => {
     .andWhere("map_id", mapId)
     .then((results) => {
       if(results.length !== 0) {
-          knex("favorites")
+        knex("favorites")
           .where("user_id", userId)
           .andWhere("map_id", mapId)
           .del()
@@ -199,16 +197,17 @@ module.exports = (knex) => {
             console.log(`Favorite deleted!`);
           });
       } else {
-        knex.insert({
-          user_id: userId,
-          map_id: mapId
-        })
-        .returning("id")
-        .into("favorites")
-        .then(function (id) {
-          res.status(201).send();
-          console.log('Added to favorites');
-        });
+        knex
+          .insert({
+            user_id: userId,
+            map_id: mapId
+          })
+          .returning("id")
+          .into("favorites")
+          .then(function (id) {
+            res.status(201).send();
+            console.log('Added to favorites');
+          });
       }
     });
   });
